@@ -4,10 +4,14 @@
  * and open the template in the editor.
  */
 package snrt;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.swing;
+
 
 /**
  *
- * @author HirokachiLT
+ * @author Alex Gaskill
  */
 public class SNRT {
 
@@ -15,7 +19,22 @@ public class SNRT {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("Hello World");
-    }
-}
+        //code from ramayac on stackover flow... begin imported code...
+            try {
+        String line;
+         Process p = Runtime.getRuntime().exec
+        (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+        BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+        while ((line = input.readLine()) != null) {
+            System.out.println(line); //<-- Parse data here.
+        }
+        input.close();
+    } 
+            catch (Exception err)
+            {
+                err.printStackTrace();
+            }
+        }
+    // end of imported code...
+ }
