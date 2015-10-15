@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class is the class that gets the processes 
+ * from the computer it is running on.
  */
 package snrt;
 
@@ -19,6 +18,8 @@ public class getPID {
                 StringBuilder controller = new StringBuilder("");
                 String line;
                 String processInfo;
+         
+                // Gets the processes.
                 Process p = Runtime.getRuntime().exec
                     (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
                 BufferedReader input =
