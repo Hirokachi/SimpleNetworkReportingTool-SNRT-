@@ -5,10 +5,8 @@
  */
 package snrt;
 import java.awt.GridLayout;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.swing.*;
+import snrt.getPID;
 
 /**
  *
@@ -19,40 +17,11 @@ public class SNRT {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
-        JFrame frame = new JFrame();
-        
-        // Adding the dementions and title of the window used for the reporting
-        // Tool
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Simple Network Reporting Tool ");
-        frame.setLocation(500,400);
-        frame.setSize(500,500);
-        
-        JPanel panel = new JPanel(new GridLayout(1,10){
-            //code from ramayac on stackover flow... begin imported code...
-            
-            String line;
-            try {
-            Process p = Runtime.getRuntime().exec
-                (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
-            BufferedReader input =
-                    new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                add(line, frame);
-            }
-            input.close();
-        }
-            catch (Exception err)
-            {
-                err.printStackTrace();
-            }
-        };
-                // end of imported code...
-                
-        });
- 
+    public static void main(String[] args){
+        getPID pID = new getPID();
+        System.out.println(pID.getProcesses());
 
-    public SNRT() {
     }
- }
+}
+
+
