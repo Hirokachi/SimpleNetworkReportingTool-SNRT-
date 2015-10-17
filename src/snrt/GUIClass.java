@@ -8,7 +8,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JTextArea;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +21,7 @@ public class GUIClass extends JPanel
                 implements ActionListener{
     
     protected JButton getProcess, nextComputer; 
-    protected static JLabel processes;
+    protected static JTextArea processes;
     protected static JPanel panelForText;
     
     /**
@@ -37,7 +37,8 @@ public class GUIClass extends JPanel
         //Listen for actions on button getProcess.
         getProcess.addActionListener(this);
  
-        getProcess.setToolTipText("Click this button to get processes on computer.");
+        getProcess.setToolTipText("Click this button to get processes on this"
+                + " computer.");
  
         //Add Components to this container, using the default FlowLayout.
         add(getProcess);
@@ -50,7 +51,10 @@ public class GUIClass extends JPanel
         
         if ("goGetIt".equals(e.getActionCommand())){
             processes.setText(pID.getProcesses());
-            System.out.print(pID.getProcesses());
+            System.out.print(processes.getText());
+            //processes.setOpaque(true);
+            //System.out.print(pID.getProcesses());
+            //processes.setVisible(true);
         }
         else {
             processes.setText("Could not find any processes!");
@@ -65,8 +69,10 @@ public class GUIClass extends JPanel
     public static void createAndShowGUI() {
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Processes");
-        processes = new JLabel("Test");
+        JFrame frame = new JFrame("Simple Network Reporter Tool - SNRT");
+        processes = new JTextArea();
+        //processes.setVerticalTextPosition();
+        //processes.setHorizontalTextPosition();
         panelForText = new JPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -76,7 +82,7 @@ public class GUIClass extends JPanel
         */
         panelForText.add(processes);
         frame.add(panelForText);
-        
+        //System.out.print(processes.isVisible());
  
         //Create and set up the content pane.
         JComponent newContentPane = new GUIClass();
@@ -86,6 +92,7 @@ public class GUIClass extends JPanel
         //Display the window.
         frame.pack();
         frame.setVisible(true);
+        
         
     }
 } 
