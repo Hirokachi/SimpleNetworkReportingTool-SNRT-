@@ -30,7 +30,7 @@ public class GUIClass extends JPanel
         getProcess = new JButton("Go Get Processes!");
         getProcess.setVerticalTextPosition(AbstractButton.CENTER);
         getProcess.setActionCommand("goGetIt");
- 
+        
         //Listen for actions on button getProcess.
         getProcess.addActionListener(this);
  
@@ -40,6 +40,7 @@ public class GUIClass extends JPanel
         add(getProcess);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         
         getPID pID = new getPID();

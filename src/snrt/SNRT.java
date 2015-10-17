@@ -4,12 +4,6 @@
  * and open the template in the editor.
  */
 package snrt;
-import java.awt.GridLayout;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import snrt.getPID;
-import snrt.GUIClass;
 
 /**
  *
