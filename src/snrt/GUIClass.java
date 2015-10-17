@@ -8,13 +8,11 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
-import snrt.getPID;
+import javax.swing.JComponent;
 /**
  *
  * @author Alex Gaskill
@@ -24,7 +22,10 @@ public class GUIClass extends JPanel
     
     protected JButton getProcess, nextComputer; 
    
-    public void ButtonMenu() {
+    /**
+    * Needs nothing
+    */
+    public GUIClass() {
         
         getProcess = new JButton("Go Get Processes!");
         getProcess.setVerticalTextPosition(AbstractButton.CENTER);
@@ -40,12 +41,16 @@ public class GUIClass extends JPanel
     }
 
     public void actionPerformed(ActionEvent e) {
-        /*
+        
         getPID pID = new getPID();
+        JLabel processes = new JLabel("Test");
+                
         if ("goGetIt".equals(e.getActionCommand())){
-            pID.getProcesses();
+            processes.setText(pID.getProcesses());
         }
-        */
+        else {
+            processes.setText("Could not find any processes!");
+        }
     }
  
     /**
@@ -53,17 +58,20 @@ public class GUIClass extends JPanel
      * this method should be invoked from the 
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
- /*
+    public static void createAndShowGUI() {
+
         //Create and set up the window.
-        JFrame frame = new JFrame("ButtonDemo");
+        JFrame frame = new JFrame("Processes");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
         //Create and set up the content pane.
+        JComponent newContentPane = new GUIClass();
+        newContentPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(newContentPane);
  
         //Display the window.
         frame.pack();
         frame.setVisible(true);
-         */
+        
     }
 } 
