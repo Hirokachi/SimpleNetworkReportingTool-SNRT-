@@ -21,15 +21,15 @@ public class GUIClass extends JPanel
                 implements ActionListener{
     
     protected JButton getProcess, nextComputer; 
-    protected static JTextArea processes;
-    protected static JPanel panelForText;
+    protected JTextArea processes;
+    protected JPanel panelForText;
     
     /**
     * Needs nothing
     */
     public GUIClass() {
         
-        
+        processes = new JTextArea("Default text", 10, 10);
         getProcess = new JButton("Go Get Processes!");
         getProcess.setVerticalTextPosition(AbstractButton.CENTER);
         getProcess.setActionCommand("goGetIt");
@@ -42,12 +42,13 @@ public class GUIClass extends JPanel
  
         //Add Components to this container, using the default FlowLayout.
         add(getProcess);
+        add(processes);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        getPID pID = new getPID();
+        ProcessComponent pID = new ProcessComponent();
         
         if ("goGetIt".equals(e.getActionCommand())){
             processes.setText(pID.getProcesses());
@@ -66,22 +67,20 @@ public class GUIClass extends JPanel
      * this method should be invoked from the 
      * event-dispatching thread.
      */
-    public static void createAndShowGUI() {
+    public void createAndShowGUI() {
 
         //Create and set up the window.
         JFrame frame = new JFrame("Simple Network Reporter Tool - SNRT");
         processes = new JTextArea();
         //processes.setVerticalTextPosition();
         //processes.setHorizontalTextPosition();
-        panelForText = new JPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         /*
         *  Add the text field to the panel that will house the text field then
         *  to the window.
         */
-        panelForText.add(processes);
-        frame.add(panelForText);
+        //this.add(processes);
         //System.out.print(processes.isVisible());
  
         //Create and set up the content pane.
