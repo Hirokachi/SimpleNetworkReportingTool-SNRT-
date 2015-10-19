@@ -17,7 +17,7 @@ public class SNRT {
 
     public static void main(String[] args){
         // Creates a new instance of the GUIClass for later use.
-        GUIClass display = new GUIClass();
+        GUIComponent display = new GUIComponent();
         display.createAndShowGUI();
     }
 }
