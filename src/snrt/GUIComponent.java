@@ -13,6 +13,9 @@ import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
+//import javax.swing.JScrollPane;
+//import javax.swing.ScrollPaneConstants;
+ 
 /**
  *
  * @author Alex Gaskill
@@ -22,16 +25,18 @@ public class GUIComponent extends JPanel
     
     protected JButton getProcess, nextComputer; 
     protected JTextArea processes;
-    protected JPanel panelForText;
+    //protected JScrollPane textScroller;
     
     /**
     * Needs nothing
     */
     public GUIComponent() {
         
-        processes = new JTextArea("Default text", 10, 10);
+        processes = new JTextArea("No Processes.", 10, 10);
+        //textScroller = new JScrollPane(processes);
         getProcess = new JButton("Go Get Processes!");
-        getProcess.setVerticalTextPosition(AbstractButton.CENTER);
+        
+        getProcess.setVerticalTextPosition(AbstractButton.BOTTOM);
         getProcess.setActionCommand("goGetIt");
         
         //Listen for actions on button getProcess.
@@ -39,10 +44,14 @@ public class GUIComponent extends JPanel
  
         getProcess.setToolTipText("Click this button to get processes on this"
                 + " computer.");
- 
+        
+        //Sets the Editable state of the TextArea to not editable.
+        processes.setEditable(false);
+        
         //Add Components to this container, using the default FlowLayout.
         add(getProcess);
         add(processes);
+        //add(textScroller);
     }
 
     @Override
@@ -77,6 +86,7 @@ public class GUIComponent extends JPanel
  
         //Display the window.
         frame.pack();
+        frame.setBounds(0, 0, 750, 500);
         frame.setVisible(true);
         
         
