@@ -71,18 +71,8 @@ public class GUIComponent extends JPanel
 
         //Create and set up the window.
         JFrame frame = new JFrame("Simple Network Reporter Tool - SNRT");
-        processes = new JTextArea();
-        //processes.setVerticalTextPosition();
-        //processes.setHorizontalTextPosition();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        /*
-        *  Add the text field to the panel that will house the text field then
-        *  to the window.
-        */
-        //this.add(processes);
-        //System.out.print(processes.isVisible());
- 
         //Create and set up the content pane.
         JComponent newContentPane = new GUIComponent();
         newContentPane.setOpaque(true); //content panes must be opaque
