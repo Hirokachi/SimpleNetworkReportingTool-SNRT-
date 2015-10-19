@@ -52,10 +52,7 @@ public class GUIComponent extends JPanel
         
         if ("goGetIt".equals(e.getActionCommand())){
             processes.setText(pID.getProcesses());
-            System.out.print(processes.getText());
-            //processes.setOpaque(true);
-            //System.out.print(pID.getProcesses());
-            //processes.setVisible(true);
+            //System.out.print(processes.getText());
         }
         else {
             processes.setText("Could not find any processes!");
