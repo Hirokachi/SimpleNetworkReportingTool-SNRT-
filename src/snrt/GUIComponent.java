@@ -12,9 +12,11 @@ import javax.swing.JTextArea;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
-//import javax.swing.JScrollPane;
-//import javax.swing.ScrollPaneConstants;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
  
 /**
  *
@@ -23,19 +25,28 @@ import javax.swing.JComponent;
 public class GUIComponent extends JPanel
                 implements ActionListener{
     
-    protected JButton getProcess, nextComputer; 
+    protected JButton getProcess, nextComputer, KillTask; 
     protected JTextArea processes;
-    //protected JScrollPane textScroller;
+    JScrollPane textScroller;
     
     /**
     * Needs nothing
     */
     public GUIComponent() {
         
-        processes = new JTextArea("No Processes.", 10, 10);
-        //textScroller = new JScrollPane(processes);
-        getProcess = new JButton("Go Get Processes!");
+        //Creates the JTextArea Container.
+        processes = new JTextArea("No Processes.", 20, 40);
         
+        //Sets the textArea to not be editable
+        processes.setEditable(false);
+        
+        // Creates the JScrollPane to have the JTextArea in it.
+        textScroller = new JScrollPane(processes, 
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        //Creates the Button "Go Get Processes" for the project and sets it up.
+        getProcess = new JButton("Go Get Processes!");
         getProcess.setVerticalTextPosition(AbstractButton.BOTTOM);
         getProcess.setActionCommand("goGetIt");
         
@@ -44,14 +55,10 @@ public class GUIComponent extends JPanel
  
         getProcess.setToolTipText("Click this button to get processes on this"
                 + " computer.");
-        
-        //Sets the Editable state of the TextArea to not editable.
-        processes.setEditable(false);
-        
+
         //Add Components to this container, using the default FlowLayout.
         add(getProcess);
-        add(processes);
-        //add(textScroller);
+        add(textScroller);
     }
 
     @Override
@@ -61,7 +68,6 @@ public class GUIComponent extends JPanel
         
         if ("goGetIt".equals(e.getActionCommand())){
             processes.setText(pID.getProcesses());
-            //System.out.print(processes.getText());
         }
         else {
             processes.setText("Could not find any processes!");
@@ -79,10 +85,43 @@ public class GUIComponent extends JPanel
         JFrame frame = new JFrame("Simple Network Reporter Tool - SNRT");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        //Create and set up the content pane.
-        JComponent newContentPane = new GUIComponent();
-        newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
+        /*
+         * Create and set up the content pane.
+         */
+        JComponent panel = new JPanel();
+        GroupLayout layout = new GroupLayout(panel);
+        frame.setLayout(layout);
+         
+        // Turn on automatically adding gaps between components
+        layout.setAutoCreateGaps(true);
+
+        // Turn on automatically creating gaps between components that touch
+        // the edge of the container and the container.
+        layout.setAutoCreateContainerGaps(true);
+        
+        // Create a sequential group for the horizontal axis.
+        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
+
+        
+        // The sequential group in turn contains two parallel groups.
+        // One parallel group contains the labels, the other the text fields.
+        // Putting the labels in a parallel group along the horizontal axis
+        // positions them at the same x location.
+        //
+        // Variable indentation is used to reinforce the level of grouping.
+        hGroup.addGroup(layout.createParallelGroup().
+            addComponent(textScroller));
+        layout.setHorizontalGroup(hGroup);
+        
+
+        // Create a sequential group for the vertical axis.
+        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+        vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE).
+            addComponent(getProcess));
+        layout.setVerticalGroup(vGroup);
+        
+        // Create the panel.
+        frame.setContentPane(panel);
  
         //Display the window.
         frame.pack();
