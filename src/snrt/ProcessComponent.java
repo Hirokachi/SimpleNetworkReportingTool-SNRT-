@@ -7,11 +7,18 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.StringBuilder;
+
 /**
  *
  * @author Alex Gaskill
  */
 public class ProcessComponent {
+        /**
+         * This method sets processInfo and returns that information to the 
+         * method/class that called it.
+         * @return: Will either return the process information, or "error: no 
+         * processes" if it couldn't find any processes running.
+         */
         public String getProcesses(){
             
           try {
@@ -33,7 +40,27 @@ public class ProcessComponent {
             }
             catch (Exception err) {
                     err.printStackTrace();
-                    return ("false");
+                    return ("Error: No Processes");
+            }
+        }
+        
+        /**
+         * This method will end the task of a selected process on the GUI-
+         * Component side. 
+         * 
+         * @param process: the process id that has been selected through the
+         * GUIComponent and needs to be killed/ended.
+         */
+        public void killSelectedProcess (int process){
+            try{
+                Runtime rt = Runtime.getRuntime();
+                if (System.getProperty("os.name").contains("windows")) 
+                    rt.exec("taskkill " + process);
+                else
+                    rt.exec("kill -9 " + process);
+            }
+            catch (Exception err){
+                err.printStackTrace();
             }
         }
 }

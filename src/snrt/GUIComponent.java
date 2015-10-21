@@ -4,7 +4,7 @@
  */
 package snrt;
 
-import javax.swing.AbstractButton;
+//import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -12,6 +12,7 @@ import javax.swing.JTextArea;
  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+//import javax.swing.DefaultSingleSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
@@ -25,12 +26,14 @@ import javax.swing.ScrollPaneConstants;
 public class GUIComponent extends JPanel
                 implements ActionListener{
     
-    protected JButton getProcess, nextComputer, KillTask; 
+    protected JButton getProcess, nextComputer, killTask; 
     protected JTextArea processes;
-    JScrollPane textScroller;
+    protected JScrollPane textScroller;
+    //int process;
     
     /**
-    * Needs nothing
+    * Defines the GUIComponent class and sets it up to be used.
+    * No parameters needed.
     */
     public GUIComponent() {
         
@@ -45,19 +48,27 @@ public class GUIComponent extends JPanel
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
-        //Creates the Button "Go Get Processes" for the project and sets it up.
+        //Creates the Button "Go Get Processes" and sets it up.
         getProcess = new JButton("Go Get Processes!");
-        getProcess.setVerticalTextPosition(AbstractButton.BOTTOM);
         getProcess.setActionCommand("goGetIt");
         
-        //Listen for actions on button getProcess.
+        //Creates the Button "Kill Selected Process" and sets it up.
+        killTask = new JButton("Kill Selected Process");
+        killTask.setActionCommand("goKillIt");
+        
+        //Listens for a press on button getProcess.
         getProcess.addActionListener(this);
+        
+        //Listens for a press on button killTask.
+        //killTask.addActionListener(this);
  
         getProcess.setToolTipText("Click this button to get processes on this"
                 + " computer.");
-
+        killTask.setToolTipText("Click this button to kill a selected process.");
+        
         //Add Components to this container, using the default FlowLayout.
         add(getProcess);
+        add(killTask);
         add(textScroller);
     }
 
@@ -117,7 +128,7 @@ public class GUIComponent extends JPanel
         // Create a sequential group for the vertical axis.
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
         vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE).
-            addComponent(getProcess));
+            addComponent(getProcess).addComponent(killTask));
         layout.setVerticalGroup(vGroup);
         
         // Create the panel.
