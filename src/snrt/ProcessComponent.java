@@ -7,6 +7,7 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.StringBuilder;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -56,13 +57,13 @@ public class ProcessComponent {
      */
     public void killSelectedProcess (String[] processInfo) {
 
-
         String processID = "NAN";
 
         //find the PID from the processInfo String.
         for (String correctPID : processInfo) {
-            if(correctPID.equals("[0-9]+"))
+            if(Pattern.matches("[0-9]{4}" ,correctPID)) {
                 processID = correctPID;
+            }
         }
         
         //Created case to not cause a fatal error in the OS with no Process ID.
@@ -79,10 +80,7 @@ public class ProcessComponent {
                 // causing the computer to kill the process by verifying the
                 // OS and running the command line to kill it. 
                 Runtime rt = Runtime.getRuntime();
-                if (System.getProperty("os.name").contains("windows")) 
-                    rt.exec("taskkill " + processID);
-                else
-                    rt.exec("kill -9 " + processID);
+                rt.exec("taskkill " + processID);
             }
             catch (Exception err) {
                 err.printStackTrace();

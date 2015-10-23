@@ -4,18 +4,18 @@
  */
 package snrt;
 
-//import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-//import javax.swing.DefaultSingleSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
  
@@ -24,12 +24,13 @@ import javax.swing.ScrollPaneConstants;
  * @author Alex Gaskill
  */
 public class GUIComponent extends JPanel
-                implements ActionListener {
+                implements ActionListener, MouseListener {
     
     protected JButton getProcess, nextComputer, previousComputer, killTask; 
     protected JTextArea processes;
     protected JScrollPane textScroller;
-    
+    protected String processID;
+            
     /**
     * Defines the GUIComponent class and sets it up to be used.
     * No parameters needed.
@@ -42,10 +43,13 @@ public class GUIComponent extends JPanel
         //Sets the textArea to not be editable
         processes.setEditable(false);
         
+        //Sets the textArea to have a mouseListener.
+        processes.addMouseListener(this);
+        
         // Creates the JScrollPane to have the JTextArea in it.
         textScroller = new JScrollPane(processes, 
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+              ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         //Creates the Button "Go Get Processes" and sets it up.
         getProcess = new JButton("Go Get Processes!");
@@ -79,11 +83,50 @@ public class GUIComponent extends JPanel
         getProcess.setToolTipText("Click this button to get processes on this"
                 + " computer.");
         killTask.setToolTipText("Click this button after selecting a process"
-                + " to kill it. At this point it is not fully developt yet.");
+                + " to kill it.");
         previousComputer.setToolTipText("Click this button to select previous "
                 + "computer in the list. This button doesn't work as of yet.");
         nextComputer.setToolTipText("Click this button to select next "
                 + "computer in the list. This button doesn't work as of yet.");
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        //Point pointOfClick = e.getPoint();
+        //JOptionPane.showMessageDialog(null, "You Clicked on " + pointOfClick
+        //       , "YAY!", JOptionPane.OK_OPTION);
+        try {
+            int line = processes.getLineOfOffset(e.getY());
+            int start = processes.getLineStartOffset( line );
+            int end = processes.getLineEndOffset( line );
+            processID = processes.getDocument().getText(start, end - start);
+            JOptionPane.showMessageDialog(null, processID 
+                    , null, JOptionPane.OK_OPTION);
+        }
+        catch(Exception err){
+            err.getStackTrace();
+        }
+        
+        
+    }
+    @Override
+    public void mouseExited(MouseEvent e){
+        //necessary to implement mouselistener
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e){
+        //necessary to implement mouselistener
+    }
+    
+    @Override
+    public void mouseReleased(MouseEvent e){
+       //necessary to implement mouselistener     
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //necessary to implement mouselistener        
     }
     
     /**
@@ -96,6 +139,7 @@ public class GUIComponent extends JPanel
         //Creating the ProcessComponent object.
         ProcessComponent pID = new ProcessComponent();
         
+        
         if (null != e.getActionCommand())switch (e.getActionCommand()) {
             case "goGetIt":
                 //sets the text in process with the information from the getProcess
@@ -103,8 +147,7 @@ public class GUIComponent extends JPanel
                 processes.setText(pID.getProcesses());
                 break;
             case "goKillIt":
-                // testing the idea of killing processes
-                String [] processInfo = {"taskmanager.exe", "jobs.exe"};
+                String [] processInfo = processID.split(" ");
                 pID.killSelectedProcess(processInfo);
                 break;
             case "nextComputer":
@@ -131,17 +174,6 @@ public class GUIComponent extends JPanel
         JFrame frame = new JFrame("Simple Network Reporter Tool - SNRT");
         //GridLayout contentGrid = new GridLayout(1,2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        /*
-         * Leaving this code out until I can create a contentGrid that make
-         * sense.
-        //Set up the Content Grid.
-        contentGrid.addLayoutComponent("Processes", textScroller);
-        contentGrid.addLayoutComponent("Buttons", nextComputer);
-        contentGrid.addLayoutComponent("Buttons", previousComputer);
-        contentGrid.addLayoutComponent("Buttons", getProcess);
-        contentGrid.addLayoutComponent("Buttons", killTask);
-        */
         
         // Create and set up the content pane.
         JComponent panel = new JPanel();
@@ -179,4 +211,4 @@ public class GUIComponent extends JPanel
         frame.setBounds(0, 0, 750, 500);
         frame.setVisible(true);  
     }
-} 
+}
