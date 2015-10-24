@@ -6,6 +6,7 @@ package snrt;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Vector;
 import java.lang.StringBuilder;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -22,12 +23,13 @@ public class ProcessComponent {
      * @return: Will either return the process information, or "error: no 
      * processes" if it couldn't find any processes running.
      */
-    public String getProcesses(){
-            
+    public Vector getProcesses(){
+        
+        Vector processList;
+        processList = new Vector();
+        
         try {
-                StringBuilder controller = new StringBuilder("");
                 String line;
-                String processInfo;
          
                 // Gets the processes.
                 Process p = Runtime.getRuntime().exec
@@ -35,15 +37,15 @@ public class ProcessComponent {
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
-                    controller.append(line + "\n");
+                    processList.addElement(line + "\n");
                 }
                 input.close();
-                processInfo = controller.toString();
-                return (processInfo);
+                return (processList);
             }
             catch (Exception err) {
                     err.printStackTrace();
-                    return ("Error: No Processes");
+                    processList.addElement("Error");
+                    return (processList);
             }
         }
         
