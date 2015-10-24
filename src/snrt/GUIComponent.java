@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Vector;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
@@ -30,6 +31,8 @@ public class GUIComponent extends JPanel
     protected JTextArea processes;
     protected JScrollPane textScroller;
     protected String processID;
+    protected Vector processList;
+    protected boolean isGetProcessPressed;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -50,6 +53,9 @@ public class GUIComponent extends JPanel
         textScroller = new JScrollPane(processes, 
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
               ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        //Sets has the button get process been pressed to false
+        isGetProcessPressed = false;
         
         //Creates the Button "Go Get Processes" and sets it up.
         getProcess = new JButton("Go Get Processes!");
@@ -92,10 +98,91 @@ public class GUIComponent extends JPanel
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        //Point pointOfClick = e.getPoint();
-        //JOptionPane.showMessageDialog(null, "You Clicked on " + pointOfClick
-        //       , "YAY!", JOptionPane.OK_OPTION);
-        try {
+        //this logic is to verify that the user did press the getprocesses
+        //button.
+        if (isGetProcessPressed) {
+            
+            int pointClicked = e.getY();
+            
+            //this large clicked case is for translating the click coordinates
+            //to the element on the list, I know this is hard to read but it is 
+            //the only way it will work the way I want/expect. However, I need
+            //find a different way to do this.
+            if (pointClicked >= 0 && pointClicked <= 70)
+                processID = processList.get(3).toString();
+            else if (pointClicked > 70 && pointClicked <= 80)
+                processID = processList.get(4).toString();
+            else if (pointClicked > 80 && pointClicked <= 90)
+                processID = processList.get(5).toString();
+            else if (pointClicked > 90 && pointClicked <= 100)
+                processID = processList.get(6).toString();
+            else if (pointClicked > 100 && pointClicked <= 110)
+                processID = processList.get(7).toString();
+            else if (pointClicked > 110 && pointClicked <= 120)
+                processID = processList.get(8).toString();
+            else if (pointClicked > 120 && pointClicked <= 130)
+                processID = processList.get(9).toString();
+            else if (pointClicked > 130 && pointClicked <= 140)
+                processID = processList.get(10).toString();
+            else if (pointClicked > 140 && pointClicked <= 150)
+                processID = processList.get(11).toString();
+            else if (pointClicked > 150 && pointClicked <= 160)
+                processID = processList.get(12).toString();
+            else if (pointClicked > 160 && pointClicked <= 170)
+                processID = processList.get(13).toString();
+            else if (pointClicked > 170 && pointClicked <= 180)
+                processID = processList.get(14).toString();
+            else if (pointClicked > 180 && pointClicked <= 190)
+                processID = processList.get(15).toString();
+            else if (pointClicked > 190 && pointClicked <= 200)
+                processID = processList.get(16).toString();
+            else if (pointClicked > 200 && pointClicked <= 210)
+                processID = processList.get(17).toString();
+            else if (pointClicked > 210 && pointClicked <= 220)
+                processID = processList.get(18).toString();
+            else if (pointClicked > 220 && pointClicked <= 230)
+                processID = processList.get(19).toString();
+            else if (pointClicked > 230 && pointClicked <= 240)
+                processID = processList.get(20).toString();
+            else if (pointClicked > 240 && pointClicked <= 250)
+                processID = processList.get(21).toString();
+            else if (pointClicked > 250 && pointClicked <= 260)
+                processID = processList.get(22).toString();
+            else if (pointClicked > 260 && pointClicked <= 270)
+                processID = processList.get(23).toString();
+            else if (pointClicked > 270 && pointClicked <= 280)
+                processID = processList.get(24).toString();
+            else if (pointClicked > 280 && pointClicked <= 290)
+                processID = processList.get(25).toString();
+            else if (pointClicked > 290 && pointClicked <= 300)
+                processID = processList.get(26).toString();
+            else if (pointClicked > 300 && pointClicked <= 310)
+                processID = processList.get(27).toString();
+            else if (pointClicked > 310 && pointClicked <= 320)
+                processID = processList.get(28).toString();
+            else if (pointClicked > 320 && pointClicked <= 330)
+                processID = processList.get(29).toString();
+            else if (pointClicked > 330 && pointClicked <= 340)
+                processID = processList.get(30).toString();
+            else if (pointClicked > 340 && pointClicked <= 350)
+                processID = processList.get(31).toString();
+            else if (pointClicked > 350 && pointClicked <= 360)
+                processID = processList.get(32).toString();
+            else if (pointClicked > 360 && pointClicked <= 370)
+                processID = processList.get(33).toString();
+            else if (pointClicked > 370 && pointClicked <= 380)
+                processID = processList.get(34).toString();
+            else if (pointClicked > 380 && pointClicked <= 390)
+                processID = processList.get(35).toString();
+            else if (pointClicked > 390 && pointClicked <= 400)
+                processID = processList.get(36).toString();
+            
+            //JOptionPane.showMessageDialog(null, "You Clicked on " + pointClicked
+            //    + "which corresponds to the process: " + processID, null
+            //        , JOptionPane.OK_OPTION);
+        }
+        
+        /*try {
             int line = processes.getLineOfOffset(e.getY());
             int start = processes.getLineStartOffset( line );
             int end = processes.getLineEndOffset( line );
@@ -106,8 +193,7 @@ public class GUIComponent extends JPanel
         catch(Exception err){
             err.getStackTrace();
         }
-        
-        
+        */   
     }
     @Override
     public void mouseExited(MouseEvent e){
@@ -143,8 +229,11 @@ public class GUIComponent extends JPanel
         if (null != e.getActionCommand())switch (e.getActionCommand()) {
             case "goGetIt":
                 //sets the text in process with the information from the getProcess
-                // method
-                processes.setText(pID.getProcesses());
+                // method and sets the vector with the information that we want 
+                // to get for the end process.
+                isGetProcessPressed = true;
+                processList = pID.getProcesses();
+                processes.setText(processList.toString());
                 break;
             case "goKillIt":
                 String [] processInfo = processID.split(" ");
