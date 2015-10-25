@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import javax.swing.JTable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -110,7 +111,7 @@ public class GUIComponent extends JPanel
            DefaultHighlighter.DefaultHighlightPainter painter;
            
            //Do math to get the row form where the user clicked.
-           int index = e.getY() / processes.getRows();
+           int index = e.getY() / processList.size();
            processID = processList.get(index).toString();
            
            //Try to add the highlighter.
@@ -168,10 +169,13 @@ public class GUIComponent extends JPanel
                 int i = 0;
                 isGetProcessPressed = true;
                 processList = pID.getProcesses();
-                processes.setText(null);
                 while (i < processList.size()) {
-                    process = processList.get(i++).toString();
-                    processes.append(process);
+                    process = processList.get(i).toString();
+                    if (i == 0)
+                        processes.setText(process);
+                    else
+                        processes.append(process);
+                    i++;
                 }
                 break;
             case "goKillIt":
