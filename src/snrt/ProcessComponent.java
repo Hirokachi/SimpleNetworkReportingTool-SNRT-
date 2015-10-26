@@ -7,7 +7,6 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Vector;
-import java.lang.StringBuilder;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -63,33 +62,25 @@ public class ProcessComponent {
 
         //find the PID from the processInfo String.
         for (String correctPID : processInfo) {
-            if(Pattern.matches("[0-9]{4}" ,correctPID)) {
+            if(Pattern.matches("[0-9]+" ,correctPID)) {
                 processID = correctPID;
+                break;
             }
         }
         
-        //Created case to not cause a fatal error in the OS with no Process ID.
-        //Otherwise, go back to trying to end the task of selected Process ID. 
-        if(processID.equals("NAN")) {
-               JOptionPane.showMessageDialog(null, "No Process ID was "
-                       + "found; was no process selected?", "EndTask Error:",
-                       JOptionPane.OK_OPTION);
+        try {
+            // Create a runtime object so that when we try to kill a process
+            // on the computer we are selecting it will be more successful
+            // causing the computer to kill the process by verifying the
+            // OS and running the command line to kill it. 
+            Runtime rt = Runtime.getRuntime();
+            rt.exec("taskkill " + processID);
         }
-        else {
-            try {
-                // Create a runtime object so that when we try to kill a process
-                // on the computer we are selecting it will be more successful
-                // causing the computer to kill the process by verifying the
-                // OS and running the command line to kill it. 
-                Runtime rt = Runtime.getRuntime();
-                rt.exec("taskkill " + processID);
-            }
-            catch (Exception err) {
-                err.printStackTrace();
-                JOptionPane.showMessageDialog(null, "No Process ID was "
-                       + "found or Process was already ended" , "EndTask Error:"
-                        , JOptionPane.OK_OPTION);
-            }
+        catch (Exception err) {
+            err.printStackTrace();
+            JOptionPane.showMessageDialog(null, "No Process ID was "
+                   + "found or Process was already ended" , "EndTask Error:"
+                    , JOptionPane.OK_OPTION);
         }
     }
 }

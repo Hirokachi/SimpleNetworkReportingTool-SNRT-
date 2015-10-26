@@ -4,39 +4,29 @@
  */
 package snrt;
 
-import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.JTable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Vector;
+import javax.swing.JList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
  
 /**
  *
  * @author Alex Gaskill
  */
 public class GUIComponent extends JPanel
-                implements ActionListener, MouseListener {
+                implements ActionListener {
     
-    protected JButton getProcess, nextComputer, previousComputer, killTask; 
-    protected JTextArea processes;
-    protected JScrollPane textScroller;
-    protected String processID;
-    protected Vector processList;
-    protected boolean isGetProcessPressed;
+    protected JButton getProcess, nextComputer, previousComputer, killTask;
+    protected JList processList;
+    protected JScrollPane scrollerText;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -44,22 +34,22 @@ public class GUIComponent extends JPanel
     */
     public GUIComponent() {
         
-        //Creates the JTextArea Container.
-        processes = new JTextArea("No Processes.", 20, 40);
+        //Create the process List item.
+        processList = new JList();
         
-        //Sets the textArea to not be editable
-        processes.setEditable(false);
+        //Sets the number of rows before it needs a scroll bar.
+        processList.setVisibleRowCount(20);
         
-        //Sets the textArea to have a mouseListener.
-        processes.addMouseListener(this);
+        //Sets the width of the cell.
+        processList.setFixedCellWidth(200);
         
-        // Creates the JScrollPane to have the JTextArea in it.
-        textScroller = new JScrollPane(processes, 
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-              ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        //Sets the processList in the ScrollPane
+        scrollerText = new JScrollPane(processList
+                , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
+                , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
-        //Sets has the button get process been pressed to false
-        isGetProcessPressed = false;
+        //Sets the scroller panel to be able to detect the wheel and scroll.
+        scrollerText.setWheelScrollingEnabled(true);
         
         //Creates the Button "Go Get Processes" and sets it up.
         getProcess = new JButton("Go Get Processes!");
@@ -100,55 +90,6 @@ public class GUIComponent extends JPanel
                 + "computer in the list. This button doesn't work as of yet.");
     }
     
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-        //this logic is to verify that the user did press the getprocesses
-        //button.
-        if (isGetProcessPressed) {
-            
-           //set up the variable painter to allow the user to know what they clicked.
-           DefaultHighlighter.DefaultHighlightPainter painter;
-           
-           //Do math to get the row form where the user clicked.
-           int index = e.getY() / processList.size();
-           processID = processList.get(index).toString();
-           
-           //Try to add the highlighter.
-           try {
-                int startIndex = processes.getLineStartOffset(index);
-                int endIndex = processes.getLineEndOffset(index);
-                painter = new DefaultHighlighter
-                        .DefaultHighlightPainter(Color.RED);
-                processes.getHighlighter()
-                        .addHighlight(startIndex, endIndex, painter);
-           }
-           catch (BadLocationException ble) {
-               ble.printStackTrace();
-           }
-        }
-    }
-    
-    @Override
-    public void mouseExited(MouseEvent e){
-        //necessary to implement mouselistener
-    }
-    
-    @Override
-    public void mouseEntered(MouseEvent e){
-        //necessary to implement mouselistener
-    }
-    
-    @Override
-    public void mouseReleased(MouseEvent e){
-       //necessary to implement mouselistener     
-    }
-    
-    @Override
-    public void mousePressed(MouseEvent e) {
-        //necessary to implement mouselistener        
-    }
-    
     /**
      * 
      * @param e 
@@ -162,25 +103,22 @@ public class GUIComponent extends JPanel
         
         if (null != e.getActionCommand())switch (e.getActionCommand()) {
             case "goGetIt":
-                //sets the text in process with the information from the getProcess
-                // method and sets the vector with the information that we want 
-                // to get for the end process.
-                String process;
-                int i = 0;
-                isGetProcessPressed = true;
-                processList = pID.getProcesses();
-                while (i < processList.size()) {
-                    process = processList.get(i).toString();
-                    if (i == 0)
-                        processes.setText(process);
-                    else
-                        processes.append(process);
-                    i++;
-                }
+                //sets the Jlist with the processesList from the getProcesses.
+                processList.setListData(pID.getProcesses());
                 break;
             case "goKillIt":
-                String [] processInfo = processID.split(" ");
-                pID.killSelectedProcess(processInfo);
+                //before trying to kill selected process it will check to see
+                //if there is a process selected. if no process is selected and 
+                //they click the kill button it will display a warning message.
+                if (!processList.isSelectionEmpty()){
+                    String [] processInfo = processList.getSelectedValue()
+                        .toString().split(" ");
+                    pID.killSelectedProcess(processInfo);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "No process was"
+                            + " selected; not ending any tasks.", "Warning:"
+                        , JOptionPane.OK_OPTION);
                 break;
             case "nextComputer":
                 JOptionPane.showMessageDialog(null, "Get Next Computer is not "
@@ -221,7 +159,7 @@ public class GUIComponent extends JPanel
         // positions them at the same x location.
         // Variable indentation is used to reinforce the level of grouping.
         hGroup.addGroup(layout.createParallelGroup().
-            addComponent(textScroller));
+            addComponent(scrollerText));
         layout.setHorizontalGroup(hGroup);
         
         // The sequential group contains two parallel groups that align
