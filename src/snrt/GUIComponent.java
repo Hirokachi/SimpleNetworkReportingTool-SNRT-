@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import java.util.regex.Pattern;
  
 /**
  *
@@ -110,10 +111,29 @@ public class GUIComponent extends JPanel
                 //before trying to kill selected process it will check to see
                 //if there is a process selected. if no process is selected and 
                 //they click the kill button it will display a warning message.
-                if (!processList.isSelectionEmpty()){
+                if (!processList.isSelectionEmpty()) {
                     String [] processInfo = processList.getSelectedValue()
                         .toString().split(" ");
-                    pID.killSelectedProcess(processInfo);
+                    String processID = "NAN";
+
+                    //find the PID from the processInfo String. We are 
+                    //guaranteed that the first match is the Process ID as this 
+                    //is how it is layed out.
+                    for (String correctPID : processInfo) {
+                        if(Pattern.matches("[0-9]+" ,correctPID)) {
+                            processID = correctPID;
+                            break;
+                        }
+                    }
+                    
+                    //Check to see if the PID wasn't found, if so then display
+                    //a warning.
+                    if("NAN".equals(processID))
+                        JOptionPane.showMessageDialog(null, "No process was"
+                            + " selected; not ending any tasks.", "Warning:"
+                        , JOptionPane.OK_OPTION);
+                    
+                    pID.killSelectedProcess(processID);
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"

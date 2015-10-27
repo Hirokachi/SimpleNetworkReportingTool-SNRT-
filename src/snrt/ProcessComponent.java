@@ -7,8 +7,6 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Vector;
-import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,20 +56,10 @@ public class ProcessComponent {
      * Component side. A little more work should be done here to get the PID
      * from the string of the process selected.
      * 
-     * @param processInfo: the process string that has been selected through 
+     * @param processID: the process string that has been selected through 
      * the GUIComponent and needs to be killed/ended.
      */
-    public void killSelectedProcess (String[] processInfo) {
-
-        String processID = "NAN";
-
-        //find the PID from the processInfo String.
-        for (String correctPID : processInfo) {
-            if(Pattern.matches("[0-9]+" ,correctPID)) {
-                processID = correctPID;
-                break;
-            }
-        }
+    public void killSelectedProcess (String processID) {
         
         try {
             // Create a runtime object so that when we try to kill a process
@@ -79,13 +67,13 @@ public class ProcessComponent {
             // causing the computer to kill the process by verifying the
             // OS and running the command line to kill it. 
             Runtime rt = Runtime.getRuntime();
-            rt.exec("taskkill " + processID);
+            if (System.getProperty("os.name").contains("Windows"))
+                rt.exec("taskkill " + processID);
+            else
+                rt.exec("kill -9 " + processID);
         }
         catch (Exception err) {
             err.printStackTrace();
-            JOptionPane.showMessageDialog(null, "No Process ID was "
-                   + "found or Process was already ended" , "EndTask Error:"
-                    , JOptionPane.OK_OPTION);
         }
     }
 }
