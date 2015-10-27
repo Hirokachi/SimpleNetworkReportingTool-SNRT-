@@ -30,9 +30,14 @@ public class ProcessComponent {
         try {
                 String line;
          
-                // Gets the processes.
-                Process p = Runtime.getRuntime().exec
-                    (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+                // Gets the processes. If the os is windows do windir. otherwise
+                // get the process by the string "ps -e"
+                Process p;
+                if (System.getProperty("os.name").contains("Windows"))
+                     p = Runtime.getRuntime().exec
+                        (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+                else
+                     p = Runtime.getRuntime().exec("ps -e"); 
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
@@ -41,7 +46,7 @@ public class ProcessComponent {
                 input.close();
                 return (processList);
             }
-            catch (Exception err) {
+        catch (Exception err) {
                     err.printStackTrace();
                     processList.addElement("Error");
                     return (processList);
