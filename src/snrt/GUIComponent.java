@@ -134,6 +134,9 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                     
                     pID.killSelectedProcess(processID);
+                    
+                    //upon a sucessfull killprocess refresh the processList
+                    processList.setListData(pID.getProcesses());
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"
