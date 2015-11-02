@@ -16,7 +16,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import java.util.regex.Pattern;
  
 /**
  *
@@ -101,7 +100,6 @@ public class GUIComponent extends JPanel
         //Creating the ProcessComponent object.
         ProcessComponent pID = new ProcessComponent();
         
-        
         if (null != e.getActionCommand())switch (e.getActionCommand()) {
             case "goGetIt":
                 //sets the Jlist with the processesList from the getProcesses.
@@ -112,28 +110,12 @@ public class GUIComponent extends JPanel
                 //if there is a process selected. if no process is selected and 
                 //they click the kill button it will display a warning message.
                 if (!processList.isSelectionEmpty()) {
-                    String [] processInfo = processList.getSelectedValue()
-                        .toString().split(" ");
-                    String processID = "NAN";
-
-                    //find the PID from the processInfo String. We are 
-                    //guaranteed that the first match is the Process ID as this 
-                    //is how it is layed out.
-                    for (String correctPID : processInfo) {
-                        if(Pattern.matches("[0-9]+" ,correctPID)) {
-                            processID = correctPID;
-                            break;
-                        }
-                    }
+                    String [] processID;
                     
-                    //Check to see if the PID wasn't found, if so then display
-                    //a warning.
-                    if("NAN".equals(processID))
-                        JOptionPane.showMessageDialog(null, "No process was"
-                            + " selected; not ending any tasks.", "Warning:"
-                        , JOptionPane.OK_OPTION);
+                    processID = processList.getSelectedValue().toString().split(" ");
                     
-                    pID.killSelectedProcess(processID);
+                    //pass the Process ID to the kill method
+                    pID.killSelectedProcess(processID[19]);
                     
                     //upon a sucessfull killprocess refresh the processList
                     processList.setListData(pID.getProcesses());

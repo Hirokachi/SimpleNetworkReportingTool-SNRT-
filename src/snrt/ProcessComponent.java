@@ -15,7 +15,7 @@ import java.util.Vector;
 public class ProcessComponent {
     
     /**
-     * This method sets processInfo and returns that information to the 
+     * This method sets processList and returns that information to the 
      * method/class that called it.
      * @return: Will either return the process information, or "error: no 
      * processes" if it couldn't find any processes running.
@@ -68,7 +68,7 @@ public class ProcessComponent {
             // OS and running the command line to kill it. 
             Runtime rt = Runtime.getRuntime();
             if (System.getProperty("os.name").contains("Windows"))
-                rt.exec("taskkill " + processID);
+                rt.exec("Taskkill /PID" + processID + "/F");
             else
                 rt.exec("kill -9 " + processID);
         }
