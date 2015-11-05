@@ -9,12 +9,14 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import javax.swing.JList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
  
 /**
@@ -26,7 +28,9 @@ public class GUIComponent extends JPanel
     
     protected JButton getProcess, nextComputer, previousComputer, killTask;
     protected JList processList;
+    protected JTextArea computerName;
     protected JScrollPane scrollerText;
+    protected String hostID;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -50,6 +54,12 @@ public class GUIComponent extends JPanel
         
         //Sets the scroller panel to be able to detect the wheel and scroll.
         scrollerText.setWheelScrollingEnabled(true);
+        
+        //sets up the computer name text area.
+        computerName = new JTextArea();
+        
+        //makes the computer name not editable.
+        computerName.setEditable(false);
         
         //Creates the Button "Go Get Processes" and sets it up.
         getProcess = new JButton("Go Get Processes!");
@@ -126,9 +136,14 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "nextComputer":
-                JOptionPane.showMessageDialog(null, "Get Next Computer is not "
-                        + "working at this time." , "Warning:"
-                        , JOptionPane.OK_OPTION);
+                //Sets the hostInfo to the information about the current host.
+                Vector hostInfo = new Vector();
+                hostInfo.addAll(pID.nextComputer());
+                
+                if(!hostInfo.get(0).equals("Error")) {
+                    hostID = hostInfo.get(0).toString();
+                    computerName.setText(hostInfo.get(1).toString());
+                }
                 break;
             case "previousComputer":
                 JOptionPane.showMessageDialog(null, "Get previous Computer is "
@@ -164,7 +179,7 @@ public class GUIComponent extends JPanel
         // positions them at the same x location.
         // Variable indentation is used to reinforce the level of grouping.
         hGroup.addGroup(layout.createParallelGroup().
-            addComponent(scrollerText));
+            addComponent(scrollerText).addComponent(computerName));
         layout.setHorizontalGroup(hGroup);
         
         // The sequential group contains two parallel groups that align
