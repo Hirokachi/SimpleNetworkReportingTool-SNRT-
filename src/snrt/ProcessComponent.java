@@ -7,10 +7,10 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Vector;
-import java.net.Inet4Address;
+/*import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
+*/
 /**
  *
  * @author Alex Gaskill
@@ -57,10 +57,10 @@ public class ProcessComponent {
     /**
      * This method will end the task of a selected process.
      * 
-     * @param processID: the process string that has been selected through 
+     * @param processName: the process string that has been selected through 
      * the GUIComponent and needs to be killed/ended.
      */
-    public void killSelectedProcess (String processID) {
+    public void killSelectedProcess (String processName) {
         
         try {
             // Create a runtime object so that when we try to kill a process
@@ -68,20 +68,23 @@ public class ProcessComponent {
             // causing the computer to kill the process by verifying the
             // OS and running the command line to kill it. 
             Runtime rt = Runtime.getRuntime();
-            if (System.getProperty("os.name").contains("Windows"))
-                rt.exec("Taskkill /PID" + processID + "/F");
+            if (System.getProperty("os.name").contains("Windows")){
+                rt.exec("sc Stop" + processName);
+                rt.exec("taskkill /IM" + processName);
+            }
             else
-                rt.exec("kill -9 " + processID);
+                rt.exec("kill -9 " + processName);
         }
         catch (Exception err) {
             err.printStackTrace();
         }
     }
+    
     /**
      * 
      * @return 
      */
-    public Vector nextComputer() {
+    /*public Vector nextComputer() {
         
         String hostName;
         String hostIP;
@@ -109,5 +112,5 @@ public class ProcessComponent {
             return (hostError);
         }
         
-    }
+    }*/
 }
