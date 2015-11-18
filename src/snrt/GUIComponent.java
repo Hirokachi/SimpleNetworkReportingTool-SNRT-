@@ -125,7 +125,7 @@ public class GUIComponent extends JPanel
                     processID = processList.getSelectedValue().toString().split(" ");
                     
                     //pass the Process ID to the kill method
-                    pID.killSelectedProcess(processID[19]);
+                    pID.killSelectedProcess(processID[0]);
                     
                     //upon a sucessfull killprocess refresh the processList
                     processList.setListData(pID.getProcesses());
@@ -136,14 +136,17 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "nextComputer":
-                //Sets the hostInfo to the information about the current host.
+                JOptionPane.showMessageDialog(null, "Get next Computer is "
+                       + "not working at this time." , "Warning:"
+                        , JOptionPane.OK_OPTION);
+               /* //Sets the hostInfo to the information about the current host.
                 Vector hostInfo = new Vector();
                 hostInfo.addAll(pID.nextComputer());
                 
                 if(!hostInfo.get(0).equals("Error")) {
                     hostID = hostInfo.get(0).toString();
                     computerName.setText(hostInfo.get(1).toString());
-                }
+                }*/
                 break;
             case "previousComputer":
                 JOptionPane.showMessageDialog(null, "Get previous Computer is "
