@@ -66,11 +66,10 @@ public class ProcessComponent {
             // Create a runtime object so that when we try to kill a process
             // on the computer we are selecting it will be more successful
             // causing the computer to kill the process by verifying the
-            // OS and running the command line to kill it. 
+            // OS and running the command line in powershell.exe to kill it. 
             Runtime rt = Runtime.getRuntime();
             if (System.getProperty("os.name").contains("Windows")){
-                rt.exec("sc Stop" + processName);
-                rt.exec("taskkill /IM" + processName);
+                rt.exec("powershell.exe taskkill /IM " + processName);
             }
             else
                 rt.exec("kill -9 " + processName);
