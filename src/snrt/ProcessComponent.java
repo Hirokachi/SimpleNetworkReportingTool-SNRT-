@@ -43,6 +43,7 @@ public class ProcessComponent {
                 }
                 input.close();
                 
+                //filters the result to only have the process name.
                 for (String words:inputString){
                     for (String word:words.split("\\p{Blank}+")) {
                         if (word.matches("[a-z]+\\.exe")) {
@@ -84,38 +85,4 @@ public class ProcessComponent {
             err.printStackTrace();
         }
     }
-    
-    /**
-     * 
-     * @return 
-     */
-    /*public Vector nextComputer() {
-        
-        String hostName;
-        String hostIP;
-        Vector hostInfo = new Vector();
-        Vector hostError = new Vector();
-        hostError.add("Error");
-        
-        try {
-            //find the host name and ip v4 address and throw that into a string
-            InetAddress addr;
-            addr = InetAddress.getLocalHost();
-            hostName = addr.getHostName();
-            hostIP = Inet4Address.getLocalHost().toString();
-            
-            //add the hostIP and hostIP that was aquired into a vector.
-            hostInfo.add(hostIP);
-            hostInfo.add(hostName);
-            
-            return (hostInfo);
-        }
-        catch (Exception err) {
-            err.printStackTrace();
-            
-            //return an one line vector that says error.
-            return (hostError);
-        }
-        
-    }*/
 }
