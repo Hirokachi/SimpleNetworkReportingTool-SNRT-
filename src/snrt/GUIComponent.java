@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 import javax.swing.JList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -74,7 +73,7 @@ public class GUIComponent extends JPanel
         nextComputer.setActionCommand("nextComputer");
         
         //Creates the Button "Get Next Computer" and sets it up.
-        previousComputer = new JButton("Get previous Computer");
+        previousComputer = new JButton("Get Previous Computer");
         previousComputer.setActionCommand("previousComputer");
         
         //Listens for pressed button getProcess.
