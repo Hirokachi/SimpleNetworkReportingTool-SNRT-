@@ -100,8 +100,10 @@ public class GUIComponent extends JPanel
     }
     
     /**
-     * 
-     * @param e 
+     * This method dictates what happens when one of the predefined buttons is 
+     * pressed
+     * @param e: whole button object which is passed to this method when 
+     * the button is pressed and released. 
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -109,7 +111,11 @@ public class GUIComponent extends JPanel
         //Creating the ProcessComponent object.
         ProcessComponent pID = new ProcessComponent();
         
-        if (null != e.getActionCommand())switch (e.getActionCommand()) {
+        //The action command is obtained by the internal method called 
+        //"getActionCommand" as long as that is not null then it will switch
+        //on whatever the actioncommand had assigned to it.
+        if (null != e.getActionCommand())
+            switch (e.getActionCommand()) {
             case "goGetIt":
                 //sets the Jlist with the processesList from the getProcesses.
                 processList.setListData(pID.getProcesses());
@@ -135,20 +141,12 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "nextComputer":
-                JOptionPane.showMessageDialog(null, "Get next Computer is "
+                JOptionPane.showMessageDialog(null, "Get Next Computer is "
                        + "not working at this time." , "Warning:"
                         , JOptionPane.OK_OPTION);
-               /* //Sets the hostInfo to the information about the current host.
-                Vector hostInfo = new Vector();
-                hostInfo.addAll(pID.nextComputer());
-                
-                if(!hostInfo.get(0).equals("Error")) {
-                    hostID = hostInfo.get(0).toString();
-                    computerName.setText(hostInfo.get(1).toString());
-                }*/
                 break;
             case "previousComputer":
-                JOptionPane.showMessageDialog(null, "Get previous Computer is "
+                JOptionPane.showMessageDialog(null, "Get Previous Computer is "
                        + "not working at this time." , "Warning:"
                         , JOptionPane.OK_OPTION);
                 break;
@@ -180,27 +178,18 @@ public class GUIComponent extends JPanel
         // Putting the labels in a parallel group along the horizontal axis
         // positions them at the same x location.
         // Variable indentation is used to reinforce the level of grouping.
-        hGroup.addGroup(layout.createParallelGroup().
-            addComponent(scrollerText).addComponent(computerName));
+        hGroup.addGroup(layout.createParallelGroup()
+                .addComponent(scrollerText).addComponent(getProcess)
+                .addComponent(killTask).addComponent(previousComputer)
+                .addComponent(nextComputer));
         layout.setHorizontalGroup(hGroup);
-        
-        // The sequential group contains two parallel groups that align
-        // the contents along the baseline. The first parallel group contains
-        // the first label and text field, and the second parallel group contains
-        // the second label and text field. By using a sequential group
-        // the labels and text fields are positioned vertically after one another.
-        GroupLayout.ParallelGroup vGroup = layout.createParallelGroup();
-        vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-                .addComponent(getProcess)).addComponent(killTask)
-                .addComponent(previousComputer).addComponent(nextComputer);
-        layout.setVerticalGroup(vGroup);
         
         // Create the panel.
         frame.setContentPane(panel);
         
         //Display the window.
         frame.pack();
-        frame.setBounds(0, 0, 750, 500);
+        frame.setBounds(0, 0, 900, 400);
         frame.setVisible(true);  
     }
 }
