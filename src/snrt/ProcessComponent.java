@@ -7,10 +7,7 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Vector;
-/*import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-*/
+
 /**
  *
  * @author Alex Gaskill
@@ -25,12 +22,12 @@ public class ProcessComponent {
      */
     public Vector getProcesses(){
         
-        Vector processList;
-        processList = new Vector();
+        Vector processList = new Vector();
+        Vector<String> inputString = new Vector<String>();
         
         try {
                 String line;
-         
+                
                 // Gets the processes. If the os is windows do windir. otherwise
                 // get the process by the string "ps -e"
                 Process p;
@@ -42,14 +39,23 @@ public class ProcessComponent {
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
-                    processList.addElement(line + "\n");
+                    inputString.addElement(line);
                 }
                 input.close();
+                
+                for (String words:inputString){
+                    for (String word:words.split("\\p{Blank}+")) {
+                        if (word.matches("[a-z]+\\.exe")) {
+                           processList.addElement(word);
+                        }
+                    }
+                }
+                
                 return (processList);
             }
         catch (Exception err) {
                     err.printStackTrace();
-                    processList.addElement("Error");
+                    processList.addElement("Error: No Processes");
                     return (processList);
             }
         }
