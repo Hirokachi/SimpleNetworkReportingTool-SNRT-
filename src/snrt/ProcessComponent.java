@@ -22,8 +22,9 @@ public class ProcessComponent {
      */
     public Vector getProcesses(){
         
+        // I create this vector as my get processes requires some way to pass 
+        // the information it has obtained to the rest of the program.
         Vector processList = new Vector();
-        Vector<String> inputString = new Vector<String>();
         
         try {
                 String line;
@@ -39,18 +40,12 @@ public class ProcessComponent {
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
-                    inputString.addElement(line);
+                    processList.addElement(line);
                 }
-                input.close();
                 
-                //filters the result to only have the process name.
-                for (String words:inputString){
-                    for (String word:words.split("\\p{Blank}+")) {
-                        if (word.matches("[a-z]+\\.exe")) {
-                           processList.addElement(word);
-                        }
-                    }
-                }
+                //closes the input stream, to make the input stream not leaking
+                //data or anything.
+                input.close();
                 
                 return (processList);
             }
