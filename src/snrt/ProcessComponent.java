@@ -20,11 +20,11 @@ public class ProcessComponent {
      * @return: Will either return the process information, or "error: no 
      * processes" if it couldn't find any processes running.
      */
-    public Vector getProcesses(){
+    public Vector<String> getProcesses(){
         
         // I create this vector as my get processes requires some way to pass 
         // the information it has obtained to the rest of the program.
-        Vector processList = new Vector();
+        Vector<String> processList = new Vector<String>();
         
         try {
                 String line;
