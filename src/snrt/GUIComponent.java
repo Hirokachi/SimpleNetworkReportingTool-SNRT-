@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import java.util.Vector;
  
 /**
  *
@@ -35,16 +36,16 @@ public class GUIComponent extends JPanel
     public GUIComponent() {
     
         //Delay for refresh of the tasklist in milliseconds
-        int delay = 6000;
+        int delay = 3000;
         
         //Create the process List item.
         processList = new JList();
         
-        //Sets the number of rows before it needs a scroll bar.
-        processList.setVisibleRowCount(20);
-        
-        //Sets the width of the cell.
-        processList.setFixedCellWidth(500);
+//        //Sets the number of rows before it needs a scroll bar.
+//        processList.setVisibleRowCount(20);
+//        
+//        //Sets the width of the cell.
+//        processList.setFixedCellWidth(500);
         
         //Sets the processList in the ScrollPane
         scrollerText = new JScrollPane(processList
@@ -64,7 +65,7 @@ public class GUIComponent extends JPanel
             @Override
              public void actionPerformed(ActionEvent evt) {
                  ProcessComponent pID = new ProcessComponent();
-                 processList.setListData(pID.getProcesses());
+                 setJTable(pID.getProcesses());
             }
         };
         
@@ -109,7 +110,7 @@ public class GUIComponent extends JPanel
             case "goGetIt":
                 //sets the Jlist with the "processList" from the "getProcesses"
                 //method.
-                processList.setListData(pID.getProcesses());
+                setJTable(pID.getProcesses());
                 break;
             case "goKillIt":
                 //before trying to kill selected process it will check to see
@@ -123,8 +124,8 @@ public class GUIComponent extends JPanel
                     //pass the Process ID to the kill method
                     pID.killSelectedProcess(processID[0]);
                     
-                    //upon a sucessfull killprocess refresh the processList
-                    processList.setListData(pID.getProcesses());
+//                    //upon a sucessfull killprocess refresh the processList
+//                    processList.setListData(pID.getProcesses());
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"
@@ -132,6 +133,26 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             }
+    }
+    
+    private void setJTable(Vector<String> taskList) {
+        
+        Object[][] taskListData;
+        Vector<String> taskListTitle = new Vector<String>();
+        
+        //Add the titles to "taskListTitle" to later add them to the JTable.
+        for(String title:taskList.get(0).split("\\p{Blank}")){
+            //TODO: make logic to filter out the blank Strings to make the array
+            //title for the jtable object.
+        }
+        
+        //Add the data of the processes to an holding array so that i can add 
+        //them directly to the "taskListData" multi-dimentional array. Later to
+        //add them to the JTable as the data.
+        for(String words:taskList){
+            //TODO: add logic to create a holding array.
+        }
+        
     }
  
     /**
