@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -27,7 +26,7 @@ public class GUIComponent extends JPanel
                 implements ActionListener {
     
     protected JButton getProcess, killTask;
-    protected JList processList;
+    protected JTable processList;
     protected JScrollPane scrollerText;
 //    protected JTable processes;
             
@@ -40,19 +39,14 @@ public class GUIComponent extends JPanel
         //Delay for refresh of the tasklist in milliseconds
         int delay = 3000;
         
-        //Create the process List item.
-        processList = new JList();
+        //Creates the JTable with the correct number of columns and rows
+        processList = new JTable (50, 5);
         
-        //Sets the number of rows before it needs a scroll bar.
-        processList.setVisibleRowCount(20);
-        
-        //Sets the width of the cell.
-        processList.setFixedCellWidth(500);
+        //Sets the "processList" to fully fill the scroller text
+        processList.setFillsViewportHeight(true);
         
         //Sets the processList in the ScrollPane
-        scrollerText = new JScrollPane(processList
-                , ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
-                , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollerText = new JScrollPane(processList);
         
         //Sets the scroller panel to be able to detect the wheel and scroll.
         scrollerText.setWheelScrollingEnabled(true);
@@ -118,13 +112,19 @@ public class GUIComponent extends JPanel
                 //before trying to kill selected process it will check to see
                 //if there is a process selected. if no process is selected and 
                 //they click the kill button it will display the warning message.
-                if (!processList.isSelectionEmpty()) {
-                    String [] processID;
+                if (processList.getSelectedRow() != 0) {
+                    String processID;
+                    int row;
+                    int column;
+      
+                    //Set the row and column of the selected cell.
+                    row = processList.getSelectedRow();
+                    column = processList.getSelectedColumn();
                     
-                    processID = processList.getSelectedValue().toString().split(" ");
+                    processID = processList.getValueAt(row, column).toString();
                     
                     //pass the Process ID to the kill method
-                    pID.killSelectedProcess(processID[0]);
+                    pID.killSelectedProcess(processID);
                     
                 }
                 else
@@ -136,41 +136,35 @@ public class GUIComponent extends JPanel
     }
     
     /**
-     * 
-     * @param taskList 
+     * sets the JTable with the data for the program.
+     * @param taskList is the information that it gets from the process
+     * component. 
      */
     private void setJTable(Vector<String> taskList) {
         
-        Vector<String> holdArray = new Vector<String>();
-        Vector<Vector<String>> taskListData = new Vector<Vector<String>>();
-        Vector<String> taskListTitle = new Vector<String>();
+        //verifies that the table has been set
+        boolean hasBeenSet = false;
+        int i = 0;
         
-        //Add the titles to "taskListTitle" to later add them to the JTable.
-        for(String title:taskList.get(0).split("\\p{Blank}")) {
-            if (title.matches("[a-zA-Z]+")) {
-                taskListTitle.add(title);
-            }
-        }
-        
-        //Add the data of the processes to an holding array so that i can add 
-        //them directly to the "taskListData" multi-dimentional array. Later to
-        //add them to the JTable as the data.
+        //does the heavy lifting of getting the data into the table.
         for(String words:taskList) {
-            for(String word: words.split("\\p{Blank}")) {
-                if(word.matches("[a-zA-Z]+\\.exe")) {
-                    holdArray.add(word);
+            int j = 0;
+            for(String word: words.split("\\s")) {
+                if(word.matches("[a-zA-Z]+\\.exe") || word.contains("System") ||
+                        word.matches("\\p{Digit}+") ||
+                        word.matches("\\p{Digit}+K") || 
+                        word.contains("HP") || word.contains("Services") ||
+                        word.contains("Console")) {
+                    processList.setValueAt(word, i, j);
+                    hasBeenSet = true;
                 }
-                else if (word.matches("\\p{Digit}")) {
-                    holdArray.add(word);
-                }   
+                if (j < 5 && j >= 0 && hasBeenSet){
+                    j++;
+                    hasBeenSet = false;
+                }
             }
-            taskListData.add(holdArray);
-        }
-        
-        //Add the found data to a JTable and throw that into the "processList"
-        //as a component.
-        JTable processes = new JTable (taskListTitle, taskListData);
-        processList.add(processes); 
+            i++;
+        }   
     }
  
     /**
