@@ -11,6 +11,7 @@ import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -28,6 +29,7 @@ public class GUIComponent extends JPanel
     protected JButton getProcess, killTask;
     protected JList processList;
     protected JScrollPane scrollerText;
+//    protected JTable processes;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -41,11 +43,11 @@ public class GUIComponent extends JPanel
         //Create the process List item.
         processList = new JList();
         
-//        //Sets the number of rows before it needs a scroll bar.
-//        processList.setVisibleRowCount(20);
-//        
-//        //Sets the width of the cell.
-//        processList.setFixedCellWidth(500);
+        //Sets the number of rows before it needs a scroll bar.
+        processList.setVisibleRowCount(20);
+        
+        //Sets the width of the cell.
+        processList.setFixedCellWidth(500);
         
         //Sets the processList in the ScrollPane
         scrollerText = new JScrollPane(processList
@@ -124,8 +126,6 @@ public class GUIComponent extends JPanel
                     //pass the Process ID to the kill method
                     pID.killSelectedProcess(processID[0]);
                     
-//                    //upon a sucessfull killprocess refresh the processList
-//                    processList.setListData(pID.getProcesses());
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"
@@ -135,24 +135,42 @@ public class GUIComponent extends JPanel
             }
     }
     
+    /**
+     * 
+     * @param taskList 
+     */
     private void setJTable(Vector<String> taskList) {
         
-        Object[][] taskListData;
+        Vector<String> holdArray = new Vector<String>();
+        Vector<Vector<String>> taskListData = new Vector<Vector<String>>();
         Vector<String> taskListTitle = new Vector<String>();
         
         //Add the titles to "taskListTitle" to later add them to the JTable.
-        for(String title:taskList.get(0).split("\\p{Blank}")){
-            //TODO: make logic to filter out the blank Strings to make the array
-            //title for the jtable object.
+        for(String title:taskList.get(0).split("\\p{Blank}")) {
+            if (title.matches("[a-zA-Z]+")) {
+                taskListTitle.add(title);
+            }
         }
         
         //Add the data of the processes to an holding array so that i can add 
         //them directly to the "taskListData" multi-dimentional array. Later to
         //add them to the JTable as the data.
-        for(String words:taskList){
-            //TODO: add logic to create a holding array.
+        for(String words:taskList) {
+            for(String word: words.split("\\p{Blank}")) {
+                if(word.matches("[a-zA-Z]+\\.exe")) {
+                    holdArray.add(word);
+                }
+                else if (word.matches("\\p{Digit}")) {
+                    holdArray.add(word);
+                }   
+            }
+            taskListData.add(holdArray);
         }
         
+        //Add the found data to a JTable and throw that into the "processList"
+        //as a component.
+        JTable processes = new JTable (taskListTitle, taskListData);
+        processList.add(processes); 
     }
  
     /**
