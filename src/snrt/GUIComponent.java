@@ -15,7 +15,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import java.util.Vector;
  
 /**
@@ -28,7 +27,6 @@ public class GUIComponent extends JPanel
     protected JButton getProcess, killTask;
     protected JTable processList;
     protected JScrollPane scrollerText;
-//    protected JTable processes;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -40,7 +38,7 @@ public class GUIComponent extends JPanel
         int delay = 3000;
         
         //Creates the JTable with the correct number of columns and rows
-        processList = new JTable (50, 5);
+        processList = new JTable (95, 5);
         
         //Sets the "processList" to fully fill the scroller text
         processList.setFillsViewportHeight(true);
@@ -145,6 +143,22 @@ public class GUIComponent extends JPanel
         //verifies that the table has been set
         boolean hasBeenSet = false;
         int i = 0;
+        int x = 0;
+        
+        //this sets the title of the jtable "processList".
+        for (String title:taskList.get(1).split("\\s")){
+            if (title.matches("[a-zA-Z]+")){
+                processList.getColumnModel().getColumn(x).setHeaderValue(title);
+                hasBeenSet = true;
+            }
+            if (x < 4 && x >= 0 && hasBeenSet){
+                x++;
+                hasBeenSet = false;
+            }
+        }        
+        
+        //resets "hasBeenSet" to false for later use.
+        hasBeenSet = false;
         
         //does the heavy lifting of getting the data into the table.
         for(String words:taskList) {
@@ -152,7 +166,7 @@ public class GUIComponent extends JPanel
             for(String word: words.split("\\s")) {
                 if(word.matches("[a-zA-Z]+\\.exe") || word.contains("System") ||
                         word.matches("\\p{Digit}+") ||
-                        word.matches("\\p{Digit}+K") || 
+                        word.matches("\\p{Digit}+\\,\\p{Digit}+\\sK") || 
                         word.contains("HP") || word.contains("Services") ||
                         word.contains("Console")) {
                     processList.setValueAt(word, i, j);
@@ -168,9 +182,7 @@ public class GUIComponent extends JPanel
     }
  
     /**
-     * Create the GUI and show it.  For thread safety, 
-     * this method should be invoked from the 
-     * event-dispatching thread.
+     * Create the GUI and show it.
      */
     public void createAndShowGUI() {
 
