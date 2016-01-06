@@ -7,6 +7,7 @@ package snrt;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -71,7 +72,18 @@ public class ProcessComponent {
             // OS and running the command line in powershell.exe to kill it. 
             Runtime rt = Runtime.getRuntime();
             if (System.getProperty("os.name").contains("Windows")){
-                rt.exec("powershell.exe taskkill /IM " + processName);
+                if (processName.matches("[0-9]+")) {
+                    rt.exec("powershell.exe taskkill /PID " + processName);
+                }
+                else if (processName.matches("[a-zA-Z]+\\.exe")){
+                    rt.exec("powershell.exe taskkill /IM " + processName);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "The task you selected "
+                            + "is neither a PID or the Image Name. Not ending "
+                            + "any tasks.", "Error:"
+                        , JOptionPane.OK_OPTION);
+                }
             }
             else
                 rt.exec("kill -9 " + processName);
