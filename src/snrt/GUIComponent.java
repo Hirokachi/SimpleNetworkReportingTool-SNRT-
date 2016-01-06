@@ -107,23 +107,23 @@ public class GUIComponent extends JPanel
                 setJTable(pID.getProcesses());
                 break;
             case "goKillIt":
+                
+                int row;
+                int column;
+
+                //Set the row and column of the selected cell.
+                row = processList.getSelectedRow();
+                column = processList.getSelectedColumn();
+                
                 //before trying to kill selected process it will check to see
                 //if there is a process selected. if no process is selected and 
                 //they click the kill button it will display the warning message.
-                if (processList.getSelectedRow() != 0) {
-                    String processID;
-                    int row;
-                    int column;
-      
-                    //Set the row and column of the selected cell.
-                    row = processList.getSelectedRow();
-                    column = processList.getSelectedColumn();
-                    
-                    processID = processList.getValueAt(row, column).toString();
+                if (processList.getSelectedRow() != 0 && 
+                        processList.getValueAt(row, column) != null ) {
                     
                     //pass the Process ID to the kill method
-                    pID.killSelectedProcess(processID);
-                    
+                    pID.killSelectedProcess(processList.getValueAt(row, column)
+                            .toString());
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"
