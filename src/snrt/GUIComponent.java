@@ -37,8 +37,14 @@ public class GUIComponent extends JPanel
         //Delay for refresh of the tasklist in milliseconds
         int delay = 3000;
         
+        //Creating the ProcessComponent object.
+        ProcessComponent pID = new ProcessComponent();
+        
+        //get the number of tasks
+        int numberOfProcesses = pID.getnumberOfTasks()+5;
+        
         //Creates the JTable with the correct number of columns and rows
-        processList = new JTable (95, 5);
+        processList = new JTable (numberOfProcesses, 5);
         
         //Sets the "processList" to fully fill the scroller text
         processList.setFillsViewportHeight(true);
@@ -92,7 +98,7 @@ public class GUIComponent extends JPanel
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+                
         //Creating the ProcessComponent object.
         ProcessComponent pID = new ProcessComponent();
         
