@@ -21,7 +21,7 @@ public class ProcessComponent {
      * @return: Will either return the process information, or "error: no 
      * processes" if it couldn't find any processes running.
      */
-    public Vector<String> getProcesses(){
+    public Vector<String> getProcesses() {
         
         // I create this vector as my get processes requires some way to pass 
         // the information it has obtained to the rest of the program.
@@ -57,6 +57,32 @@ public class ProcessComponent {
             }
         }
         
+    /**
+     * This method is to get the number tasks so that the jtable knows how many
+     * rows of cells to place in the GUI.
+     * @return: the number of tasks.
+     */
+    public int getnumberOfTasks () {
+        int numberOfTasks = 0;
+        String line;
+        try{
+            Process p = Runtime.getRuntime().exec
+                        (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+            BufferedReader input =
+                        new BufferedReader(
+                                new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                    numberOfTasks++;
+            }
+            return (numberOfTasks);
+        }
+        catch (Exception err) {
+            err.printStackTrace();
+            return (0);
+        }
+                          
+    }
+    
     /**
      * This method will end the task of a selected process.
      * 
