@@ -143,22 +143,13 @@ public class GUIComponent extends JPanel
         //verifies that the table has been set
         boolean hasBeenSet = false;
         int i = 0;
-        int x = 0;
+        String[] title = {"Image Name", "PID", "Session Name", "Session#",
+            "Mem Usage (K)"};
         
         //this sets the title of the jtable "processList".
-        for (String title:taskList.get(1).split("\\s")){
-            if (title.matches("[a-zA-Z]+")){
-                processList.getColumnModel().getColumn(x).setHeaderValue(title);
-                hasBeenSet = true;
-            }
-            if (x < 4 && x >= 0 && hasBeenSet){
-                x++;
-                hasBeenSet = false;
-            }
+        for (int x = 0 ; x < 5; x++) {
+            processList.getColumnModel().getColumn(x).setHeaderValue(title[x]);
         }        
-        
-        //resets "hasBeenSet" to false for later use.
-        hasBeenSet = false;
         
         //does the heavy lifting of getting the data into the table.
         for(String words:taskList) {
@@ -166,9 +157,11 @@ public class GUIComponent extends JPanel
             for(String word: words.split("\\s")) {
                 if(word.matches("[a-zA-Z]+\\.exe") || word.contains("System") ||
                         word.matches("\\p{Digit}+") ||
-                        word.matches("\\p{Digit}+\\,\\p{Digit}+\\sK") || 
+                        word.matches("\\p{Digit}+\\,\\p{Digit}+") || 
                         word.contains("HP") || word.contains("Services") ||
-                        word.contains("Console")) {
+                        word.contains("Console") ||
+                        word.matches("[a-zA-Z]+[0-9]+\\.exe") ||
+                        word.matches("[a-zA-Z]+\\-[a-zA-Z]+\\.exe") ) {
                     processList.setValueAt(word, i, j);
                     hasBeenSet = true;
                 }
