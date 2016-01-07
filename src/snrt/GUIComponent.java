@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
  
 /**
  *
@@ -146,6 +147,13 @@ public class GUIComponent extends JPanel
      */
     private void setJTable(Vector<String> taskList) {
         
+        
+        ProcessComponent pID = new ProcessComponent();
+        
+        
+        DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
+        dtm.setRowCount(pID.getnumberOfTasks());
+        
         //verifies that the table has been set
         boolean hasBeenSet = false;
         int i = 0;
@@ -177,7 +185,7 @@ public class GUIComponent extends JPanel
                 }
             }
             i++;
-        }   
+        }
     }
  
     /**
