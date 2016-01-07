@@ -25,9 +25,18 @@ import javax.swing.table.DefaultTableModel;
 public class GUIComponent extends JPanel
                 implements ActionListener {
     
+    /**
+     * The secret and protected variable that I don't wish to pass everywhere.
+     * Here is the List:
+     * JButton getProcess, killTask
+     * JTable processList
+     * JScrollPane scrollerText
+     * ProcessComponent pID
+     */
     protected JButton getProcess, killTask;
     protected JTable processList;
     protected JScrollPane scrollerText;
+    protected ProcessComponent pID;
             
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -36,13 +45,13 @@ public class GUIComponent extends JPanel
     public GUIComponent() {
     
         //Delay for refresh of the tasklist in milliseconds
-        int delay = 3000;
+        int delay = 4500;
         
         //Creating the ProcessComponent object.
-        ProcessComponent pID = new ProcessComponent();
+        pID = new ProcessComponent();
         
         //get the number of tasks
-        int numberOfProcesses = pID.getnumberOfTasks()+5;
+        int numberOfProcesses = pID.getnumberOfTasks();
         
         //Creates the JTable with the correct number of columns and rows
         processList = new JTable (numberOfProcesses, 5);
@@ -99,9 +108,6 @@ public class GUIComponent extends JPanel
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-                
-        //Creating the ProcessComponent object.
-        ProcessComponent pID = new ProcessComponent();
         
         //The action command is obtained by the internal method called 
         //"getActionCommand" as long as that is not null then it will switch
@@ -147,10 +153,7 @@ public class GUIComponent extends JPanel
      */
     private void setJTable(Vector<String> taskList) {
         
-        
-        ProcessComponent pID = new ProcessComponent();
-        
-        
+        //add the number of rows to the jtable so it looks nice.
         DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
         dtm.setRowCount(pID.getnumberOfTasks());
         
@@ -184,7 +187,10 @@ public class GUIComponent extends JPanel
                     hasBeenSet = false;
                 }
             }
-            i++;
+            if(words.contains(".exe") || words.contains("HP") 
+                    || words.contains("System")) {
+                i++;
+            }
         }
     }
  
