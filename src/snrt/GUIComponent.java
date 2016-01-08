@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.util.Vector;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
  
 /**
@@ -37,7 +38,8 @@ public class GUIComponent extends JPanel
     protected JTable processList;
     protected JScrollPane scrollerText;
     protected ProcessComponent pID;
-            
+    protected JTextArea numberOfProcess;
+    
     /**
     * Defines the GUIComponent class and sets it up to be used.
     * No parameters needed.
@@ -52,6 +54,15 @@ public class GUIComponent extends JPanel
         
         //get the number of tasks
         int numberOfProcesses = pID.getnumberOfTasks();
+        
+        //Set up the string that will go in to the text area
+        String processes = "number of Processes: " + numberOfProcesses;
+        
+        //Create an object of a textArea.
+        numberOfProcess = new JTextArea(processes);
+        
+        //Make the number of processes not editable.
+        numberOfProcess.setEditable(false);
         
         //Creates the JTable with the correct number of columns and rows
         processList = new JTable (numberOfProcesses, 5);
@@ -157,6 +168,12 @@ public class GUIComponent extends JPanel
         DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
         dtm.setRowCount(pID.getnumberOfTasks());
         
+        //Set up the string that will go in to the text area
+        String processes = "number of Processes: " + pID.getnumberOfTasks();
+        
+        //Set the number of processes in the text area.
+        numberOfProcess.setText(processes);
+        
         //verifies that the table has been set
         boolean hasBeenSet = false;
         int i = 0;
@@ -221,7 +238,7 @@ public class GUIComponent extends JPanel
         //the group.
         Group.addGroup(layout.createSequentialGroup()
                 .addComponent(scrollerText).addComponent(getProcess)
-                .addComponent(killTask));
+                .addComponent(killTask).addComponent(numberOfProcess));
         
         //adds the group as a vertical group in the layout for the frame and
         //doesn't need to be put first because it is setting the content after
