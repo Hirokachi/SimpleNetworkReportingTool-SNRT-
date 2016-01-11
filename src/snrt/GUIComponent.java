@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.util.Vector;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
@@ -39,7 +40,8 @@ public class GUIComponent extends JPanel
     protected JTable processList;
     protected JScrollPane scrollerText;
     protected ProcessComponent pID;
-    protected JTextArea numberOfProcess, nameOfComputers;
+    protected JTextArea numberOfProcess;
+    protected JRadioButtonMenuItem namesOfComputers;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -54,7 +56,7 @@ public class GUIComponent extends JPanel
         pID = new ProcessComponent();
         
        //
-//        setRadioButtons();
+       setRadioButtons();
         
         //get the number of tasks
         int numberOfProcesses = pID.getnumberOfTasks();
@@ -130,7 +132,6 @@ public class GUIComponent extends JPanel
         if (null != e.getActionCommand())
             switch (e.getActionCommand()) {
             case "goGetIt":
-                
                 //sets the Jlist with the "processList" from the "getProcesses"
                 //method.
                 setJTable(pID.getProcesses());
@@ -158,6 +159,8 @@ public class GUIComponent extends JPanel
                     JOptionPane.showMessageDialog(null, "No process was"
                             + " selected; not ending any tasks.", "Warning:"
                         , JOptionPane.OK_OPTION);
+                break;
+            case "goGetThat":
                 break;
             }
     }
@@ -219,23 +222,26 @@ public class GUIComponent extends JPanel
     /*
      * set the names of the connected devices as radio button
      */
-//    private void setRadioButtons() {
-//        
-//        //
-//        if (!pID.getComputerNames().isEmpty()){
-//            //Does the heavy Lifting for the names of computers;
-//            for (String lines: pID.getComputerNames()){
-//                JRadioButton computerName = new JRadioButton(lines);
-//                computerName.setActionCommand("goGetIt");
-//                computerName.addActionListener(this);
-//                nameOfComputers.add(computerName);
-//            }
-//        }
-//        else
-//            JOptionPane.showMessageDialog(null, "There aren't any"
-//                    + "computers connected to this device!", "Warning:"
-//                        , JOptionPane.OK_OPTION);
-//    }
+    private void setRadioButtons() {
+        
+        //
+        namesOfComputers = new JRadioButtonMenuItem();
+        
+        //
+        if (!pID.getComputerNames().isEmpty()) {
+            //Does the heavy Lifting for the names of computers;
+            for (String lines: pID.getComputerNames()) {
+                JRadioButton computerName = new JRadioButton(lines);
+                computerName.setActionCommand("goGetThat");
+                computerName.addActionListener(this);
+                namesOfComputers.add(computerName);
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(null, "There aren't any"
+                    + "computers connected to this device!", "Warning:"
+                        , JOptionPane.OK_OPTION);
+    }
  
     /**
      * Create the GUI and show it.
@@ -263,7 +269,7 @@ public class GUIComponent extends JPanel
         //adds the scrollerText, getProcess button, and the killTask button to
         //the group.
         Group.addGroup(layout.createSequentialGroup()
-                .addComponent(nameOfComputers).addComponent(scrollerText)
+                .addComponent(namesOfComputers).addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         
@@ -277,7 +283,7 @@ public class GUIComponent extends JPanel
         
         //Display the window.
         frame.pack();
-        frame.setBounds(0, 0, 600, 500);
+        frame.setBounds(0, 0, 550, 600);
         frame.setVisible(true);  
     }
 }
