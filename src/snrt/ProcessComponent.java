@@ -118,4 +118,32 @@ public class ProcessComponent {
             err.printStackTrace();
         }
     }
+    
+    public Vector<String> getComputerNames (){
+        
+        String line;
+        
+        //The vector that will contain the list of names
+        Vector<String> computerNameList = new Vector<String>();
+       
+        
+        try{
+            Process p = Runtime.getRuntime().exec
+                        (System.getenv("windir") +"\\system32\\"+"nbtstat -r");
+            BufferedReader input =
+                        new BufferedReader(
+                                new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                if (line.contains("<00>"))
+                    computerNameList.add(line);
+            }
+            
+            
+            return (computerNameList);
+        }
+        catch (Exception err) {
+            err.printStackTrace();
+            return (null);
+        }   
+    }
 }
