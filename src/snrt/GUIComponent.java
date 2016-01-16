@@ -16,9 +16,12 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.util.Vector;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
  
 /**
@@ -161,6 +164,16 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "goGetThat":
+                JPasswordField pwf = new JPasswordField(12);
+                JTextField user = new JTextField();
+                JTextPane menu = new JTextPane();
+                menu.add(pwf);
+                menu.add(user);
+                JOptionPane.showConfirmDialog(null, menu, "Please enter the username and"
+                        + " password for the selected computer:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                        
+//                setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+//                        [0], user.getText(), pwf.getPassword()));
                 break;
             }
     }
@@ -267,11 +280,22 @@ public class GUIComponent extends JPanel
         GroupLayout.SequentialGroup Group = layout.createSequentialGroup();
         
         //adds the scrollerText, getProcess button, and the killTask button to
-        //the group.
-        Group.addGroup(layout.createSequentialGroup()
+        //the group if there isn't any connected computers to this computer. 
+        //otherwise add the namesOfComputers radiomenu
+        if (pID.getComputerNames().isEmpty()) {
+            Group.addGroup(layout.createSequentialGroup()
+                .addComponent(scrollerText)
+                .addComponent(getProcess).addComponent(killTask)
+                .addComponent(numberOfProcess));
+        }
+        else {
+             Group.addGroup(layout.createSequentialGroup()
                 .addComponent(namesOfComputers).addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
+        }
+        
+       
         
         //adds the group as a vertical group in the layout for the frame and
         //doesn't need to be put first because it is setting the content after
