@@ -146,4 +146,9 @@ public class ProcessComponent {
             return (null);
         }   
     }
+//    public Vector<String> getProcesses(Object computerName, String user
+//            , char[] pwd) {     
+//        
+//        return (processList);
+//    }
 }
