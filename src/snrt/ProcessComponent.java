@@ -37,7 +37,7 @@ public class ProcessComponent {
                      p = Runtime.getRuntime().exec
                         (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
                 else
-                     p = Runtime.getRuntime().exec("ps -e"); 
+                     p = Runtime.getRuntime().exec("ps -A"); 
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
@@ -65,9 +65,15 @@ public class ProcessComponent {
     public int getnumberOfTasks () {
         int numberOfTasks = 0;
         String line;
+        Process p;
         try{
-            Process p = Runtime.getRuntime().exec
+            if (System.getProperty("os.name").contains("Windows")) {
+                p = Runtime.getRuntime().exec
                         (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+            }
+            else {
+                p = Runtime.getRuntime().exec("ps aux -A"); 
+            }
             BufferedReader input =
                         new BufferedReader(
                                 new InputStreamReader(p.getInputStream()));
@@ -146,9 +152,54 @@ public class ProcessComponent {
             return (null);
         }   
     }
-//    public Vector<String> getProcesses(Object computerName, String user
-//            , char[] pwd) {     
-//        
-//        return (processList);
-//    }
+    
+    /**
+     * Different process for remote computer.
+     * @param computerName
+     * @param user
+     * @param pwd
+     * @return 
+     */
+    public Vector<String> getProcesses(Object computerName, String user
+            , char[] pwd) {     
+        
+        // I create this vector as my get processes requires some way to pass 
+        // the information it has obtained to the rest of the program.
+        Vector<String> processList = new Vector<String>();
+        
+        
+        
+        try {
+            String line;
+
+            // Gets the processes. If the os is windows do windir. otherwise
+            // get the process by the string "ps -e"
+            Process p;
+            if (System.getProperty("os.name").contains("Windows"))
+                 p = Runtime.getRuntime().exec
+                    (System.getenv("windir") +"\\system32\\"+"tasklist.exe \\S " 
+                            + computerName +" \\U "+ user +"\\P"+ pwd);
+            else {
+                p = Runtime.getRuntime().exec("ps aux -a"); 
+            }
+            
+            BufferedReader input =
+                    new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                processList.addElement(line);
+            }
+
+            //closes the input stream, to make the input stream not leaking
+            //data or anything.
+            input.close();
+
+            return (processList);
+                
+        }
+        catch (Exception err) {
+                err.printStackTrace();
+                processList.addElement("Error: No Processes");
+                return (processList);
+        }
+    }
 }
