@@ -38,6 +38,8 @@ public class GUIComponent extends JPanel
      * JTable processList
      * JScrollPane scrollerText
      * ProcessComponent pID
+     * JPasswordField pwf
+     * JTextField user
      */
     protected JButton getProcess, killTask;
     protected JTable processList;
@@ -45,6 +47,8 @@ public class GUIComponent extends JPanel
     protected ProcessComponent pID;
     protected JTextArea numberOfProcess;
     protected JRadioButtonMenuItem namesOfComputers;
+    protected JPasswordField pwf;
+    protected JTextField user;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -94,8 +98,14 @@ public class GUIComponent extends JPanel
         ActionListener taskPerformer = new ActionListener() {
             @Override
              public void actionPerformed(ActionEvent evt) {
-                 ProcessComponent pID = new ProcessComponent();
-                 setJTable(pID.getProcesses());
+                 if ( !namesOfComputers.isSelected()){
+                     setJTable(pID.getProcesses());
+                 }
+                 else {
+//                        setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+//                                [0], user.getText(), pwf.getPassword()));                     
+                 }
+
             }
         };
         
@@ -154,9 +164,14 @@ public class GUIComponent extends JPanel
                 if (processList.getSelectedRow() != 0 && 
                         processList.getValueAt(row, column) != null ) {
                     
-                    //pass the Process ID to the kill method
-                    pID.killSelectedProcess(processList.getValueAt(row, column)
-                            .toString());
+                    if(!namesOfComputers.isSelected()) {
+                        //pass the Process ID to the kill method
+                        pID.killSelectedProcess(processList.getValueAt(row, column)
+                                .toString());
+                    }
+                    else {
+                        //To-Do: make a new killtask process.
+                    }
                 }
                 else
                     JOptionPane.showMessageDialog(null, "No process was"
@@ -164,8 +179,8 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "goGetThat":
-                JPasswordField pwf = new JPasswordField(12);
-                JTextField user = new JTextField();
+                 pwf = new JPasswordField(12);
+                user = new JTextField();
                 JTextPane menu = new JTextPane();
                 menu.add(pwf);
                 menu.add(user);
@@ -250,10 +265,6 @@ public class GUIComponent extends JPanel
                 namesOfComputers.add(computerName);
             }
         }
-        else
-            JOptionPane.showMessageDialog(null, "There aren't any"
-                    + "computers connected to this device!", "Warning:"
-                        , JOptionPane.OK_OPTION);
     }
  
     /**
