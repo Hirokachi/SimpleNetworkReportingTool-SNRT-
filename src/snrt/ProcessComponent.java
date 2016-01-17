@@ -134,8 +134,14 @@ public class ProcessComponent {
        
         
         try{
-            Process p = Runtime.getRuntime().exec
-                        (System.getenv("windir") +"\\system32\\"+"nbtstat -r");
+            Process p;
+            if (System.getProperty("os.name").contains("Windows")) {
+                p = Runtime.getRuntime().exec
+                            (System.getenv("windir") +"\\system32\\"+"nbtstat -r");
+            }
+            else {
+                p = Runtime.getRuntime().exec("nmbstat -M");
+            } 
             BufferedReader input =
                         new BufferedReader(
                                 new InputStreamReader(p.getInputStream()));
