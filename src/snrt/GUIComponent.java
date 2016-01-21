@@ -41,14 +41,14 @@ public class GUIComponent extends JPanel
      * JPasswordField pwf
      * JTextField user
      */
-    protected JButton getProcess, killTask;
+    protected JButton getProcess, killTask, goSearch;
     protected JTable processList;
     protected JScrollPane scrollerText;
     protected ProcessComponent pID;
     protected JTextArea numberOfProcess;
     protected JRadioButtonMenuItem namesOfComputers;
     protected JPasswordField pwf;
-    protected JTextField user;
+    protected JTextField user, searchFilter;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -74,6 +74,9 @@ public class GUIComponent extends JPanel
         //Create an object of a textArea.
         numberOfProcess = new JTextArea(processes);
         
+        //The textbox for filtering processes
+        searchFilter = new JTextField(12);
+        
         //Make the number of processes not editable.
         numberOfProcess.setEditable(false);
         
@@ -98,16 +101,23 @@ public class GUIComponent extends JPanel
         ActionListener taskPerformer = new ActionListener() {
             @Override
              public void actionPerformed(ActionEvent evt) {
-                 if ( !namesOfComputers.isSelected()){
-                     setJTable(pID.getProcesses());
+                 if (searchFilter.getText().equalsIgnoreCase("")) {
+                     if ( !namesOfComputers.isSelected()){
+                        setJTable(pID.getProcesses());
+                     }
+                     else {
+                        setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+                                [0], user.getText(), pwf.getPassword()));                     
+                     }
                  }
-                 else {
-//                        setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
-//                                [0], user.getText(), pwf.getPassword()));                     
-                 }
+                 
 
             }
         };
+        
+        goSearch = new JButton("Search");
+        goSearch.setActionCommand("goSearchIt");
+        goSearch.addActionListener(this);
         
         //Creates a new timer to be used in refreshing the task list after the
         //number of milliseconds defined by the delay variable.
@@ -128,6 +138,9 @@ public class GUIComponent extends JPanel
                 + " computer.");
         killTask.setToolTipText("Click this button after selecting a process"
                 + " to kill it.");
+        goSearch.setToolTipText("Click this button after typing in box next to "
+                + "this button to refresh processes and filter them based on "
+                + "your input.");
     }
     
     /**
@@ -153,17 +166,18 @@ public class GUIComponent extends JPanel
                 
                 int row;
                 int column;
-
-                //Set the row and column of the selected cell.
-                row = processList.getSelectedRow();
-                column = processList.getSelectedColumn();
                 
                 //before trying to kill selected process it will check to see
                 //if there is a process selected. if no process is selected and 
                 //they click the kill button it will display the warning message.
-                if (processList.getSelectedRow() != 0 && 
-                        processList.getValueAt(row, column) != null ) {
+                if (processList.getSelectedRow() != -1) {
+
+                    //Set the row and column of the selected cell.
+                    row = processList.getSelectedRow();
+                    column = processList.getSelectedColumn();
                     
+                    //if no radio button is selected then kill the task on this
+                    //computer.
                     if(!namesOfComputers.isSelected()) {
                         //pass the Process ID to the kill method
                         pID.killSelectedProcess(processList.getValueAt(row, column)
@@ -180,17 +194,47 @@ public class GUIComponent extends JPanel
                 break;
             case "goGetThat":
                  pwf = new JPasswordField(12);
-                user = new JTextField();
+                user = new JTextField(12);
                 JTextPane menu = new JTextPane();
                 menu.add(pwf);
                 menu.add(user);
                 JOptionPane.showConfirmDialog(null, menu, "Please enter the username and"
                         + " password for the selected computer:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                         
-//                setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
-//                        [0], user.getText(), pwf.getPassword()));
+                setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+                        [0], user.getText(), pwf.getPassword()));
+                break;
+            case "goSearchIt":
+                setJTable(searchFilter(searchFilter.getText(), pID.getProcesses()));
                 break;
             }
+    }
+    
+    /*
+     * Filter the tasks by the searchValue
+     * @param searchValue, tasks
+     * @return 
+     */
+    private Vector<String> searchFilter (String searchValue, Vector<String> tasks) {
+        
+        //add the number of rows to the jtable so it looks nice.
+        DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
+        dtm.setRowCount(0);
+        
+        //The variable that will store the tasks that match the filter value
+        Vector<String> filteredTasks = new Vector<String>();
+        
+        //Verifies that the searchvalue is not 
+        if (searchValue != null) {
+            for (String task:tasks){
+                String name = task.split(" ")[0];
+                if(name.contains(searchValue)) {
+                    filteredTasks.add(task);
+                }
+            }
+        }
+        
+        return (filteredTasks);
     }
     
     /*
@@ -292,15 +336,17 @@ public class GUIComponent extends JPanel
         
         //adds the scrollerText, getProcess button, and the killTask button to
         //the group if there isn't any connected computers to this computer. 
-        //otherwise add the namesOfComputers radiomenu
+        //otherwise add the namesOfComputers radio menu
         if (pID.getComputerNames().isEmpty()) {
             Group.addGroup(layout.createSequentialGroup()
+                .addComponent(searchFilter).addComponent(goSearch)
                 .addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
         else {
              Group.addGroup(layout.createSequentialGroup()
+                .addComponent(searchFilter).addComponent(goSearch)
                 .addComponent(namesOfComputers).addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
