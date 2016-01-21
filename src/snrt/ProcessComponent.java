@@ -80,7 +80,7 @@ public class ProcessComponent {
             while ((line = input.readLine()) != null) {
                     numberOfTasks++;
             }
-            return (numberOfTasks);
+            return (numberOfTasks-3);
         }
         catch (Exception err) {
             err.printStackTrace();
