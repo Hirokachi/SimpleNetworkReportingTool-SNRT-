@@ -40,6 +40,7 @@ public class GUIComponent extends JPanel
      * ProcessComponent pID
      * JPasswordField pwf
      * JTextField user
+     * int resultFilterNumber
      */
     protected JButton getProcess, killTask, goSearch;
     protected JTable processList;
@@ -49,6 +50,7 @@ public class GUIComponent extends JPanel
     protected JRadioButtonMenuItem namesOfComputers;
     protected JPasswordField pwf;
     protected JTextField user, searchFilter;
+    protected int resultFilterNumber;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -62,11 +64,13 @@ public class GUIComponent extends JPanel
         //Creating the ProcessComponent object.
         pID = new ProcessComponent();
         
-       //
-       setRadioButtons();
+        //
+        setRadioButtons();
         
         //get the number of tasks
         int numberOfProcesses = pID.getnumberOfTasks();
+        
+        
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + numberOfProcesses;
@@ -140,7 +144,7 @@ public class GUIComponent extends JPanel
                 + " to kill it.");
         goSearch.setToolTipText("Click this button after typing in box next to "
                 + "this button to refresh processes and filter them based on "
-                + "your input.");
+                + "your input which will only search on image name.");
     }
     
     /**
@@ -217,6 +221,9 @@ public class GUIComponent extends JPanel
      */
     private Vector<String> searchFilter (String searchValue, Vector<String> tasks) {
         
+        //Set the "resultFilterNumber" to zero.
+        resultFilterNumber = 0;
+        
         //add the number of rows to the jtable so it looks nice.
         DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
         dtm.setRowCount(0);
@@ -224,12 +231,17 @@ public class GUIComponent extends JPanel
         //The variable that will store the tasks that match the filter value
         Vector<String> filteredTasks = new Vector<String>();
         
-        //Verifies that the searchvalue is not 
+        //Verifies that the searchvalue is not empty
         if (searchValue != null) {
-            for (String task:tasks){
+            //start looking throught the processes.
+            for (String task:tasks) {
+                //grab the image name to see if the search value is contained in
+                // the image name. Add one to the resulting processes number in 
+                // the search.
                 String name = task.split(" ")[0];
-                if(name.contains(searchValue)) {
+                if(name.toLowerCase().contains(searchValue.toLowerCase())) {
                     filteredTasks.add(task);
+                    resultFilterNumber++;
                 }
             }
         }
@@ -244,9 +256,20 @@ public class GUIComponent extends JPanel
      */
     private void setJTable(Vector<String> taskList) {
         
-        //add the number of rows to the jtable so it looks nice.
-        DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
-        dtm.setRowCount(pID.getnumberOfTasks());
+        //if the "resultFilterNumber" more than or equal to the total number of 
+        //processes than it wasn't filtered. Otherwise it is filtered, so set the
+        //number of rows in the table to the result number of processes
+        if(searchFilter.getText().equalsIgnoreCase("")) {
+            //add the number of rows to the jtable so it looks nice.
+            DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
+            dtm.setRowCount(pID.getnumberOfTasks());
+        }
+        else {
+            //add the number of rows to the jtable so it looks nice.
+            DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
+            dtm.setRowCount(resultFilterNumber);
+        }
+        
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + pID.getnumberOfTasks();
@@ -296,10 +319,11 @@ public class GUIComponent extends JPanel
      */
     private void setRadioButtons() {
         
-        //
+        //create the holder to hold the resulting computer names
         namesOfComputers = new JRadioButtonMenuItem();
         
-        //
+        //as long as there are computers that are seen by this computer then
+        //show the names of those computers
         if (!pID.getComputerNames().isEmpty()) {
             //Does the heavy Lifting for the names of computers;
             for (String lines: pID.getComputerNames()) {
