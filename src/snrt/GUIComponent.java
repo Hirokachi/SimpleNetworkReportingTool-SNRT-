@@ -64,13 +64,11 @@ public class GUIComponent extends JPanel
         //Creating the ProcessComponent object.
         pID = new ProcessComponent();
         
-        //
+        //sets the possible connected computers
         setRadioButtons();
         
         //get the number of tasks
         int numberOfProcesses = pID.getnumberOfTasks();
-        
-        
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + numberOfProcesses;
@@ -269,7 +267,6 @@ public class GUIComponent extends JPanel
             DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
             dtm.setRowCount(resultFilterNumber);
         }
-        
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + pID.getnumberOfTasks();
