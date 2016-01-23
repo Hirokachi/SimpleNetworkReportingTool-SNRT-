@@ -34,15 +34,15 @@ public class GUIComponent extends JPanel
     /**
      * The secret and protected variable that I don't wish to pass everywhere.
      * Here is the List:
-     * JButton getProcess, killTask
+     * JButton getProcess, killTask, goSearch, settings
      * JTable processList
      * JScrollPane scrollerText
      * ProcessComponent pID
      * JPasswordField pwf
      * JTextField user
-     * int resultFilterNumber
+     * int resultFilterNumber, delay
      */
-    protected JButton getProcess, killTask, goSearch;
+    protected JButton getProcess, killTask, goSearch, settings;
     protected JTable processList;
     protected JScrollPane scrollerText;
     protected ProcessComponent pID;
@@ -50,7 +50,7 @@ public class GUIComponent extends JPanel
     protected JRadioButtonMenuItem namesOfComputers;
     protected JPasswordField pwf;
     protected JTextField user, searchFilter;
-    protected int resultFilterNumber;
+    protected int resultFilterNumber, delay;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -58,8 +58,8 @@ public class GUIComponent extends JPanel
     */
     public GUIComponent() {
     
-        //Delay for refresh of the tasklist in milliseconds
-        int delay = 4500;
+        //Default Delay for refresh of the tasklist in milliseconds
+        delay = 4500;
         
         //Creating the ProcessComponent object.
         pID = new ProcessComponent();
@@ -117,9 +117,15 @@ public class GUIComponent extends JPanel
             }
         };
         
+        //Search button made here.
         goSearch = new JButton("Search");
         goSearch.setActionCommand("goSearchIt");
         goSearch.addActionListener(this);
+        
+        //Settings button
+        settings = new JButton("settings");
+        settings.setActionCommand("goSetIt");
+        settings.addActionListener(this);
         
         //Creates a new timer to be used in refreshing the task list after the
         //number of milliseconds defined by the delay variable.
@@ -209,6 +215,10 @@ public class GUIComponent extends JPanel
             case "goSearchIt":
                 setJTable(searchFilter(searchFilter.getText(), pID.getProcesses()));
                 break;
+            case "goSetIt":
+                SettingComponent setIt = new SettingComponent();
+                setIt.SettingGUI();
+                break;
             }
     }
     
@@ -247,6 +257,14 @@ public class GUIComponent extends JPanel
         return (filteredTasks);
     }
     
+    /**
+     * Set the delay until the next time it refreshes
+     * @param refreshRate: is the time until next refresh in milliseconds
+     */
+    public void setDelay(int refreshRate) {
+        delay = refreshRate;
+    }
+         
     /*
      * sets the JTable with the data for the program.
      * @param taskList is the information that it gets from the process
@@ -360,15 +378,15 @@ public class GUIComponent extends JPanel
         //otherwise add the namesOfComputers radio menu
         if (pID.getComputerNames().isEmpty()) {
             Group.addGroup(layout.createSequentialGroup()
-                .addComponent(searchFilter).addComponent(goSearch)
-                .addComponent(scrollerText)
+                .addComponent(settings).addComponent(searchFilter)
+                .addComponent(goSearch).addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
         else {
              Group.addGroup(layout.createSequentialGroup()
-                .addComponent(searchFilter).addComponent(goSearch)
-                .addComponent(namesOfComputers).addComponent(scrollerText)
+                .addComponent(settings).addComponent(searchFilter)
+                .addComponent(goSearch).addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
