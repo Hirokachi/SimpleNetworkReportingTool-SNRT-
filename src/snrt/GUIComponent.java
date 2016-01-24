@@ -32,7 +32,7 @@ public class GUIComponent extends JPanel
                 implements ActionListener {
     
     /**
-     * The secret and protected variable that I don't wish to pass everywhere.
+     * The private variables that I don't wish to pass everywhere.
      * Here is the List:
      * JButton getProcess, killTask, goSearch, settings
      * JTable processList
@@ -42,21 +42,25 @@ public class GUIComponent extends JPanel
      * JTextField user
      * int resultFilterNumber, delay
      */
-    protected JButton getProcess, killTask, goSearch, settings;
-    protected JTable processList;
-    protected JScrollPane scrollerText;
-    protected ProcessComponent pID;
-    protected JTextArea numberOfProcess;
-    protected JRadioButtonMenuItem namesOfComputers;
-    protected JPasswordField pwf;
-    protected JTextField user, searchFilter;
-    protected int resultFilterNumber, delay;
+    private final JButton getProcess, killTask, goSearch, settings;
+    private final JTable processList;
+    private final JScrollPane scrollerText;
+    private final ProcessComponent pID;
+    private final JTextArea numberOfProcess;
+    private JRadioButtonMenuItem namesOfComputers;
+    private JPasswordField pwf;
+    private JTextField user, searchFilter;
+    private int resultFilterNumber, delay;
+    private boolean isNonmatchingRemoved, isMatchedHighlighted;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
     * No parameters needed.
     */
     public GUIComponent() {
+        
+        isMatchedHighlighted = false;
+        isNonmatchingRemoved = true;
     
         //Default Delay for refresh of the tasklist in milliseconds
         delay = 4500;
@@ -213,7 +217,14 @@ public class GUIComponent extends JPanel
                         [0], user.getText(), pwf.getPassword()));
                 break;
             case "goSearchIt":
-                setJTable(searchFilter(searchFilter.getText(), pID.getProcesses()));
+                if (isNonmatchingRemoved && !isMatchedHighlighted) {
+                    setJTable(searchFilter(searchFilter.getText(),
+                            pID.getProcesses()));
+                }
+                else if (!isNonmatchingRemoved && isMatchedHighlighted) {
+                    setJTable(pID.getProcesses());
+                    highlightFilter(searchFilter.getText());
+                }
                 break;
             case "goSetIt":
                 SettingComponent setIt = new SettingComponent();
@@ -257,12 +268,42 @@ public class GUIComponent extends JPanel
         return (filteredTasks);
     }
     
+    /*
+    * Highlights the rows that contains the searchValue.
+    */
+    private void highlightFilter (String searchValue) {
+        if (!searchValue.isEmpty()) {
+            for (int i = 0; i < processList.getRowCount(); i++) {
+                if(processList.getValueAt(i, 0).toString()
+                        .contains(searchValue)) {
+                    //To-Do: add highlight rows that contain searchValue
+                }
+            }
+        }
+    }
+    
     /**
      * Set the delay until the next time it refreshes
      * @param refreshRate: is the time until next refresh in milliseconds
      */
     public void setDelay(int refreshRate) {
         delay = refreshRate;
+    }
+    
+    /**
+     * Sets the way that the filter shows results
+     * @param filter: description of how filter shows results
+     */
+    public void setFilter(String filter) {
+        String answer = "Highlight results";
+        if (answer.equals(filter)) {
+            isMatchedHighlighted = true;
+            isNonmatchingRemoved = false;
+        }
+        else {
+            isMatchedHighlighted = true;
+            isNonmatchingRemoved = false; 
+        }
     }
          
     /*
