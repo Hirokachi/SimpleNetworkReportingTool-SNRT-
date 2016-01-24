@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This is the Settings class.
  */
 package snrt;
 
@@ -13,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -22,15 +21,25 @@ import javax.swing.JTextField;
  */
 public class SettingComponent extends JPanel implements ActionListener{
     
-    protected GUIComponent GUI;
-    protected JTextField refreshDelay;
-    protected JFrame settings;
+    /**
+     * Global private variables that are dumb to pass everywhere.
+     */
+    private GUIComponent GUI;
+    private JTextField refreshDelay;
+    private JFrame settings;
+    private String[] description = { "choose an option", "Highlight results",
+        "Eliminate nonmatching results" };
+    private JComboBox filterOptions = new JComboBox();
     
     /**
-     * 
+     * Things that need to be set up before any methods can be called
      */
     public SettingComponent() {
-    
+        
+        //Sets the options for filtering in the dropdown menu
+        for (int i = 0; i < 3; i++) {
+            filterOptions.addItem(description[i]);
+        }
     }
 
 
@@ -46,7 +55,7 @@ public class SettingComponent extends JPanel implements ActionListener{
         GUI = new GUIComponent();
         
         //Label for the TextField
-        JLabel delayLabel = new JLabel("Delay(milliseconds) until next refresh");
+        JLabel delayLabel = new JLabel("Delay(milliseconds) until next refresh:");
 
         //TextField Setup
         refreshDelay = new JTextField(12);
@@ -58,7 +67,12 @@ public class SettingComponent extends JPanel implements ActionListener{
         JButton applySettings = new JButton("Apply and close");
         applySettings.setActionCommand("setSettings");
         applySettings.addActionListener(this);
-
+        
+        //sets Label for the dropdown FilterOptions
+        JLabel filterOptionsLabel = new JLabel("Configuration of Filter results:");
+        
+        //Sets the dropdown FilterOptions label
+        filterOptionsLabel.setLabelFor(filterOptions);
 
         // Create and set up the content pane.
         JComponent panel = new JPanel();
@@ -70,14 +84,14 @@ public class SettingComponent extends JPanel implements ActionListener{
         //Create a sequential group to be added to the layout for the frame.
         GroupLayout.SequentialGroup Group = layout.createSequentialGroup();
 
-
+        //Adds the components to this setting group.
         Group.addGroup(layout.createSequentialGroup()
                 .addComponent(delayLabel).addComponent(refreshDelay)
+                .addComponent(filterOptionsLabel).addComponent(filterOptions)
                 .addComponent(applySettings));
 
-        //adds the group as a vertical group in the layout for the frame and
-        //doesn't need to be put first because it is setting the content after
-        //the layout is created and intialized.
+        //adds the group to the layout and the layout is already set to 
+        //the window
         layout.setVerticalGroup(Group);
 
         // Create the panel.
@@ -85,7 +99,7 @@ public class SettingComponent extends JPanel implements ActionListener{
 
         //Display the window.
         settings.pack();
-        settings.setBounds(0, 0, 550, 600);
+        settings.setBounds(0, 0, 250, 300);
         settings.setVisible(true);  
 
     }
@@ -102,15 +116,27 @@ public class SettingComponent extends JPanel implements ActionListener{
         if (null != e.getActionCommand())
             switch (e.getActionCommand()) {
             case "setSettings":
-                if(refreshDelay.getText().isEmpty()) {
-                   JOptionPane.showMessageDialog(null, "No value for the"
-                        + " Delay(milliseconds) until next refresh."
-                           + " Not setting delay.", "Warning:"
+                if (refreshDelay.getText().isEmpty() && 
+                        filterOptions.getSelectedItem().equals("choose an option")) {
+                    JOptionPane.showMessageDialog(null, "No Settings where "
+                            + "changed. Not setting anything.", "Warning:"
                     , JOptionPane.OK_OPTION); 
                 }
-                else{
+                else if(refreshDelay.getText().isEmpty() && 
+                        !filterOptions.getSelectedItem().equals("choose an option")) {
+                    GUI.setFilter(filterOptions.getSelectedItem().toString());
+                    settings.dispose();
+                }
+                else if (!refreshDelay.getText().isEmpty() && 
+                       filterOptions.getSelectedItem().equals("choose an option")) {
                     String delay = refreshDelay.getText();
                     GUI.setDelay(Integer.parseInt(delay));
+                    settings.dispose();
+                }
+                else {
+                    String delay = refreshDelay.getText();
+                    GUI.setDelay(Integer.parseInt(delay));
+                    GUI.setFilter(filterOptions.getSelectedItem().toString());
                     settings.dispose();
                 }
             break;
