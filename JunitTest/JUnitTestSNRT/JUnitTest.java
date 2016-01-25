@@ -35,13 +35,6 @@ public class JUnitTest {
     }
     
     @Test
-    public void TestGetNumberOfProcesses() {
-        //Verifies that the number of tasks on this computer is not zero.
-        assertThat("Number of tasks must not be zero", 
-                processing.getnumberOfTasks(), not(0));
-    }
-    
-    @Test
     public void TestGetComputerNames() {
         //Asserting that the getComputerNames will not be null.
         assertNotNull(processing.getComputerNames());
