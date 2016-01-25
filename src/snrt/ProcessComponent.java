@@ -56,38 +56,6 @@ public class ProcessComponent {
                     return (processList);
             }
         }
-        
-    /**
-     * This method is to get the number tasks so that the jtable knows how many
-     * rows of cells to place in the GUI.
-     * @return: the number of tasks.
-     */
-    public int getnumberOfTasks () {
-        int numberOfTasks = 0;
-        String line;
-        Process p;
-        try{
-            if (System.getProperty("os.name").contains("Windows")) {
-                p = Runtime.getRuntime().exec
-                        (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
-            }
-            else {
-                p = Runtime.getRuntime().exec("ps aux -A"); 
-            }
-            BufferedReader input =
-                        new BufferedReader(
-                                new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                    numberOfTasks++;
-            }
-            return (numberOfTasks-3);
-        }
-        catch (Exception err) {
-            err.printStackTrace();
-            return (0);
-        }
-                          
-    }
     
     /**
      * This method will end the task of a selected process.
