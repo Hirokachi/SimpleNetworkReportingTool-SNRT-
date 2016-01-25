@@ -57,6 +57,10 @@ public class SettingComponent extends JPanel implements ActionListener{
         //Label for the TextField
         JLabel delayLabel = new JLabel("Delay(milliseconds) until next refresh:");
 
+        //Sets the default action for hitting the x button on the window to 
+        // close the window instead of the program.
+        settings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
         //TextField Setup
         refreshDelay = new JTextField(12);
 
@@ -99,7 +103,7 @@ public class SettingComponent extends JPanel implements ActionListener{
 
         //Display the window.
         settings.pack();
-        settings.setBounds(0, 0, 250, 300);
+        settings.setBounds(0, 0, 300, 300);
         settings.setVisible(true);  
 
     }
