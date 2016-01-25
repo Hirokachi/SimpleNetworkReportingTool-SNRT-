@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -51,7 +52,7 @@ public class GUIComponent extends JPanel
     private JPasswordField pwf;
     private JTextField user, searchFilter;
     private int resultFilterNumber, delay;
-    private boolean isNonmatchingRemoved, isMatchedHighlighted;
+    private boolean isNonmatchingRemoved, isMatchedHighlighted, isSetting;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
@@ -59,8 +60,10 @@ public class GUIComponent extends JPanel
     */
     public GUIComponent() {
         
+        //Set flags to default.
         isMatchedHighlighted = false;
         isNonmatchingRemoved = true;
+        isSetting = false;
     
         //Default Delay for refresh of the tasklist in milliseconds
         delay = 4500;
@@ -72,7 +75,7 @@ public class GUIComponent extends JPanel
         setRadioButtons();
         
         //get the number of tasks
-        int numberOfProcesses = pID.getnumberOfTasks();
+        int numberOfProcesses = pID.getProcesses().size()-3;
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + numberOfProcesses;
@@ -88,6 +91,15 @@ public class GUIComponent extends JPanel
         
         //Creates the JTable with the correct number of columns and rows
         processList = new JTable (numberOfProcesses, 5);
+        
+        //Set the names for the title of the jtable "processList"
+        String[] title = {"Image Name", "PID", "Session Name", "Session#",
+            "Mem Usage (K)"};
+        
+        //this sets the title of the jtable "processList".
+        for (int x = 0 ; x < 5; x++) {
+            processList.getColumnModel().getColumn(x).setHeaderValue(title[x]);
+        }   
         
         //Sets the "processList" to fully fill the scroller text
         processList.setFillsViewportHeight(true);
@@ -107,7 +119,7 @@ public class GUIComponent extends JPanel
         ActionListener taskPerformer = new ActionListener() {
             @Override
              public void actionPerformed(ActionEvent evt) {
-                 if (searchFilter.getText().equalsIgnoreCase("")) {
+                 if (searchFilter.getText().equalsIgnoreCase("") && !isSetting) {
                      if ( !namesOfComputers.isSelected()){
                         setJTable(pID.getProcesses());
                      }
@@ -227,6 +239,7 @@ public class GUIComponent extends JPanel
                 }
                 break;
             case "goSetIt":
+                isSetting = true;
                 SettingComponent setIt = new SettingComponent();
                 setIt.SettingGUI();
                 break;
@@ -266,6 +279,22 @@ public class GUIComponent extends JPanel
         }
         
         return (filteredTasks);
+    }
+    
+    /**
+     * If the focus returns to this frame then turn on the refresh tasks.
+     * 
+     */
+    public void focusGained() {
+        isSetting = false;
+    }
+    
+    /**
+     * If the focus is lost (goes away from the main GUI frame) then turn off
+     * refresh tasks.
+     */
+    public void focusLost() {
+        isSetting = true;
     }
     
     /*
@@ -319,7 +348,7 @@ public class GUIComponent extends JPanel
         if(searchFilter.getText().equalsIgnoreCase("")) {
             //add the number of rows to the jtable so it looks nice.
             DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
-            dtm.setRowCount(pID.getnumberOfTasks());
+            dtm.setRowCount(pID.getProcesses().size()-3);
         }
         else {
             //add the number of rows to the jtable so it looks nice.
@@ -328,7 +357,7 @@ public class GUIComponent extends JPanel
         }
         
         //Set up the string that will go in to the text area
-        String processes = "number of Processes: " + pID.getnumberOfTasks();
+        String processes = "number of Processes: " + pID.getProcesses().size();
         
         //Set the number of processes in the text area.
         numberOfProcess.setText(processes);
@@ -336,19 +365,12 @@ public class GUIComponent extends JPanel
         //verifies that the table has been set
         boolean hasBeenSet = false;
         int i = 0;
-        String[] title = {"Image Name", "PID", "Session Name", "Session#",
-            "Mem Usage (K)"};
-        
-        //this sets the title of the jtable "processList".
-        for (int x = 0 ; x < 5; x++) {
-            processList.getColumnModel().getColumn(x).setHeaderValue(title[x]);
-        }        
         
         //does the heavy lifting of getting the data into the table.
         for(String words:taskList) {
             int j = 0;
             for(String word: words.split("\\s")) {
-                if(word.matches("[a-zA-Z]+\\.exe") || word.contains("System") ||
+                if(word.matches("[a-zA-Z]+\\.*[a-zA-Z]+\\.exe") || word.contains("System") ||
                         word.matches("\\p{Digit}+") ||
                         word.matches("\\p{Digit}+\\,\\p{Digit}+") || 
                         word.contains("HP") || word.contains("Services") ||
@@ -438,6 +460,8 @@ public class GUIComponent extends JPanel
         //doesn't need to be put first because it is setting the content after
         //the layout is created and intialized.
         layout.setVerticalGroup(Group);
+        
+        frame.addFocusListener(null);
         
         // Create the panel.
         frame.setContentPane(panel);
