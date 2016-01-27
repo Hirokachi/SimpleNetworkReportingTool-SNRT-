@@ -4,13 +4,13 @@
  */
 package snrt;
 
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import javax.swing.JTable;
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -52,18 +52,13 @@ public class GUIComponent extends JPanel
     private JPasswordField pwf;
     private JTextField user, searchFilter;
     private int resultFilterNumber, delay;
-    private boolean isNonmatchingRemoved, isMatchedHighlighted, isSetting;
+    private boolean isMatchedHighlighted;
     
     /**
     * Defines the GUIComponent class and sets it up to be used.
     * No parameters needed.
     */
     public GUIComponent() {
-        
-        //Set flags to default.
-        isMatchedHighlighted = false;
-        isNonmatchingRemoved = true;
-        isSetting = false;
     
         //Default Delay for refresh of the tasklist in milliseconds
         delay = 4500;
@@ -119,7 +114,7 @@ public class GUIComponent extends JPanel
         ActionListener taskPerformer = new ActionListener() {
             @Override
              public void actionPerformed(ActionEvent evt) {
-                 if (searchFilter.getText().equalsIgnoreCase("") && !isSetting) {
+                 if (searchFilter.getText().equalsIgnoreCase("")) {
                      if ( !namesOfComputers.isSelected()){
                         setJTable(pID.getProcesses());
                      }
@@ -229,19 +224,18 @@ public class GUIComponent extends JPanel
                         [0], user.getText(), pwf.getPassword()));
                 break;
             case "goSearchIt":
-                if (isNonmatchingRemoved && !isMatchedHighlighted) {
+                if (!isMatchedHighlighted) {
                     setJTable(searchFilter(searchFilter.getText(),
                             pID.getProcesses()));
                 }
-                else if (!isNonmatchingRemoved && isMatchedHighlighted) {
+                else {
                     setJTable(pID.getProcesses());
                     highlightFilter(searchFilter.getText());
                 }
                 break;
             case "goSetIt":
-                isSetting = true;
                 SettingComponent setIt = new SettingComponent();
-                setIt.SettingGUI();
+                setIt.SettingGUI(this);
                 break;
             }
     }
@@ -281,31 +275,17 @@ public class GUIComponent extends JPanel
         return (filteredTasks);
     }
     
-    /**
-     * If the focus returns to this frame then turn on the refresh tasks.
-     * 
-     */
-    public void focusGained() {
-        isSetting = false;
-    }
-    
-    /**
-     * If the focus is lost (goes away from the main GUI frame) then turn off
-     * refresh tasks.
-     */
-    public void focusLost() {
-        isSetting = true;
-    }
-    
     /*
     * Highlights the rows that contains the searchValue.
     */
     private void highlightFilter (String searchValue) {
+        
         if (!searchValue.isEmpty()) {
             for (int i = 0; i < processList.getRowCount(); i++) {
                 if(processList.getValueAt(i, 0).toString()
                         .contains(searchValue)) {
-                    //To-Do: add highlight rows that contain searchValue
+                    processList.setRowSelectionInterval(i, i);
+                    
                 }
             }
         }
@@ -325,14 +305,7 @@ public class GUIComponent extends JPanel
      */
     public void setFilter(String filter) {
         String answer = "Highlight results";
-        if (answer.equals(filter)) {
-            isMatchedHighlighted = true;
-            isNonmatchingRemoved = false;
-        }
-        else {
-            isMatchedHighlighted = true;
-            isNonmatchingRemoved = false; 
-        }
+        isMatchedHighlighted = answer.equals(filter);
     }
          
     /*
@@ -345,7 +318,8 @@ public class GUIComponent extends JPanel
         //if the "resultFilterNumber" more than or equal to the total number of 
         //processes than it wasn't filtered. Otherwise it is filtered, so set the
         //number of rows in the table to the result number of processes
-        if(searchFilter.getText().equalsIgnoreCase("")) {
+        if (searchFilter.getText().equalsIgnoreCase("") 
+                || isMatchedHighlighted) {
             //add the number of rows to the jtable so it looks nice.
             DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
             dtm.setRowCount(pID.getProcesses().size()-3);
@@ -464,8 +438,6 @@ public class GUIComponent extends JPanel
         //doesn't need to be put first because it is setting the content after
         //the layout is created and intialized.
         layout.setVerticalGroup(Group);
-        
-        frame.addFocusListener(null);
         
         // Create the panel.
         frame.setContentPane(panel);
