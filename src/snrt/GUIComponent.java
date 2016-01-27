@@ -370,14 +370,18 @@ public class GUIComponent extends JPanel
         for(String words:taskList) {
             int j = 0;
             for(String word: words.split("\\s")) {
-                if(word.matches("[a-zA-Z]+\\.*[a-zA-Z]+\\.exe") || word.contains("System") ||
-                        word.matches("\\p{Digit}+") ||
-                        word.matches("\\p{Digit}+\\,\\p{Digit}+") || 
+                if(word.matches("[a-zA-Z]+\\.*[a-zA-Z]+\\.exe") ||
+                        word.contains("System") ||
+                        word.matches("\\p{Digit}+\\,*\\p{Digit}*") || 
                         word.contains("HP") || word.contains("Services") ||
                         word.contains("Console") ||
                         word.matches("[a-zA-Z]+[0-9]+\\.exe") ||
-                        word.matches("[a-zA-Z]+\\-[a-zA-Z]+\\.exe") ) {
+                        word.matches("[a-zA-Z]+\\-[a-zA-Z]+\\.exe")) {
                     processList.setValueAt(word, i, j);
+                    hasBeenSet = true;
+                }
+                else if(j == 2 && !hasBeenSet && word.isEmpty()) {
+                    processList.setValueAt("No Value", i, j);
                     hasBeenSet = true;
                 }
                 if (j < 5 && j >= 0 && hasBeenSet){
