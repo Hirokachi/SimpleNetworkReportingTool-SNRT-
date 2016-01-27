@@ -45,14 +45,14 @@ public class SettingComponent extends JPanel implements ActionListener{
 
     /**
      * Create the setting GUI
+     * @param processer
      */
-    public void SettingGUI() {
+    public void SettingGUI (GUIComponent processer) {
+        
+        GUI = processer;
 
         //Create and set up the window.
         settings = new JFrame("SNRT: Settings page");
-        
-        //Make a instance of the GUIComponent
-        GUI = new GUIComponent();
         
         //Label for the TextField
         JLabel delayLabel = new JLabel("Delay(milliseconds) until next refresh:");
