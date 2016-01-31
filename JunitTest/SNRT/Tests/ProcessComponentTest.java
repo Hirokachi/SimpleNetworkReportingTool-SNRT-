@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JUnitTestSNRT;
+package SNRT.Tests;
 
 import static org.hamcrest.core.IsNot.not;
 import snrt.*;
@@ -15,7 +15,7 @@ import java.util.Vector;
  *
  * @author Alex Gaskill
  */
-public class JUnitTest {
+public class ProcessComponentTest {
     
     private ProcessComponent processing;
     
