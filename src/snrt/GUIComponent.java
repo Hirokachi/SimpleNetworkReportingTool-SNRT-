@@ -42,7 +42,7 @@ public class GUIComponent extends JPanel
      * JTextField user
      * int resultFilterNumber, delay
      */
-    private final JButton getProcess, killTask, goSearch, settings;
+    private final JButton getProcess, killTask, settings;
     private final JTable processList;
     private final JScrollPane scrollerText;
     private final ProcessComponent processComponent;
@@ -122,15 +122,18 @@ public class GUIComponent extends JPanel
                                 [0], user.getText(), pwf.getPassword()));                     
                      }
                  }
-                 
-
+                 else {
+                     if (isMatchedHighlighted) {
+                        setJTable(processComponent.getProcesses());
+                        highlightFilter(searchFilter.getText());
+                     }
+                     else {
+                         setJTable(searchFilter(searchFilter.getText(),
+                            processComponent.getProcesses()));
+                     }
+                 }
             }
         };
-        
-        //Search button made here.
-        goSearch = new JButton("Search");
-        goSearch.setActionCommand("goSearchIt");
-        goSearch.addActionListener(this);
         
         //Settings button
         settings = new JButton("settings");
@@ -156,9 +159,6 @@ public class GUIComponent extends JPanel
                 + " computer.");
         killTask.setToolTipText("Click this button after selecting a process"
                 + " to kill it.");
-        goSearch.setToolTipText("Click this button after typing in box next to "
-                + "this button to refresh processes and filter them based on "
-                + "your input which will only search on image name.");
     }
     
     /**
@@ -221,16 +221,6 @@ public class GUIComponent extends JPanel
                         
                 setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
                         [0], user.getText(), pwf.getPassword()));
-                break;
-            case "goSearchIt":
-                if (!isMatchedHighlighted) {
-                    setJTable(searchFilter(searchFilter.getText(),
-                            processComponent.getProcesses()));
-                }
-                else {
-                    setJTable(processComponent.getProcesses());
-                    highlightFilter(searchFilter.getText());
-                }
                 break;
             case "goSetIt":
                 SettingComponent setIt = new SettingComponent();
@@ -422,14 +412,14 @@ public class GUIComponent extends JPanel
         if (processComponent.getComputerNames().isEmpty()) {
             Group.addGroup(layout.createSequentialGroup()
                 .addComponent(settings).addComponent(searchFilter)
-                .addComponent(goSearch).addComponent(scrollerText)
+                .addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
         else {
              Group.addGroup(layout.createSequentialGroup()
                 .addComponent(settings).addComponent(searchFilter)
-                .addComponent(goSearch).addComponent(scrollerText)
+                .addComponent(scrollerText)
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
