@@ -4,7 +4,6 @@
  */
 package snrt;
 
-import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -16,7 +15,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import java.util.Vector;
+import java.util.ArrayDeque;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRadioButton;
@@ -245,7 +244,7 @@ public class GUIComponent extends JPanel
      * @param searchValue, tasks
      * @return 
      */
-    private Vector<String> searchFilter (String searchValue, Vector<String> tasks) {
+    private ArrayDeque<String> searchFilter (String searchValue, ArrayDeque<String> tasks) {
         
         //Set the "resultFilterNumber" to zero.
         resultFilterNumber = 0;
@@ -255,21 +254,21 @@ public class GUIComponent extends JPanel
         dtm.setRowCount(0);
         
         //The variable that will store the tasks that match the filter value
-        Vector<String> filteredTasks = new Vector<String>();
+        ArrayDeque<String> filteredTasks = new ArrayDeque();
         
         //Verifies that the searchvalue is not empty
         if (searchValue != null) {
             //start looking throught the processes.
-            for (String task:tasks) {
+            tasks.stream().forEach((task) -> {
                 //grab the image name to see if the search value is contained in
                 // the image name. Add one to the resulting processes number in 
                 // the search.
                 String name = task.split(" ")[0];
-                if(name.toLowerCase().contains(searchValue.toLowerCase())) {
+                if (name.toLowerCase().contains(searchValue.toLowerCase())) {
                     filteredTasks.add(task);
                     resultFilterNumber++;
                 }
-            }
+            });
         }
         
         return (filteredTasks);
@@ -313,7 +312,7 @@ public class GUIComponent extends JPanel
      * @param taskList is the information that it gets from the process
      * component. 
      */
-    private void setJTable(Vector<String> taskList) {
+    private void setJTable(ArrayDeque<String> taskList) {
         
         //if the "resultFilterNumber" more than or equal to the total number of 
         //processes than it wasn't filtered. Otherwise it is filtered, so set the
@@ -382,12 +381,15 @@ public class GUIComponent extends JPanel
         //show the names of those computers
         if (!processComponent.getComputerNames().isEmpty()) {
             //Does the heavy Lifting for the names of computers;
-            for (String lines: processComponent.getComputerNames()) {
-                JRadioButton computerName = new JRadioButton(lines);
+            processComponent.getComputerNames().stream().map((lines) -> new JRadioButton(lines)).map((computerName) -> {
                 computerName.setActionCommand("goGetThat");
+                return computerName;
+            }).map((computerName) -> {
                 computerName.addActionListener(this);
+                return computerName;
+            }).forEach((computerName) -> {
                 namesOfComputers.add(computerName);
-            }
+            });
         }
     }
  

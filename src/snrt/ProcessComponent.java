@@ -6,7 +6,7 @@ package snrt;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Vector;
+import java.util.ArrayDeque;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,11 +21,11 @@ public class ProcessComponent {
      * @return: Will either return the process information, or "error: no 
      * processes" if it couldn't find any processes running.
      */
-    public Vector<String> getProcesses() {
+    public ArrayDeque<String> getProcesses() {
         
         // I create this vector as my get processes requires some way to pass 
         // the information it has obtained to the rest of the program.
-        Vector<String> processList = new Vector<String>();
+        ArrayDeque<String> processList = new ArrayDeque();
         
         try {
                 String line;
@@ -41,7 +41,7 @@ public class ProcessComponent {
                 BufferedReader input =
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
-                    processList.addElement(line);
+                    processList.add(line);
                 }
                 
                 //closes the input stream, to make the input stream not leaking
@@ -52,7 +52,7 @@ public class ProcessComponent {
             }
         catch (Exception err) {
                     err.printStackTrace();
-                    processList.addElement("Error: No Processes");
+                    processList.add("Error: No Processes");
                     return (processList);
             }
         }
@@ -93,12 +93,12 @@ public class ProcessComponent {
         }
     }
     
-    public Vector<String> getComputerNames (){
+    public ArrayDeque<String> getComputerNames (){
         
         String line;
         
         //The vector that will contain the list of names
-        Vector<String> computerNameList = new Vector<String>();
+        ArrayDeque<String> computerNameList = new ArrayDeque();
        
         
         try{
@@ -134,12 +134,12 @@ public class ProcessComponent {
      * @param pwd
      * @return 
      */
-    public Vector<String> getProcesses(Object computerName, String user
+    public ArrayDeque<String> getProcesses(Object computerName, String user
             , char[] pwd) {     
         
         // I create this vector as my get processes requires some way to pass 
         // the information it has obtained to the rest of the program.
-        Vector<String> processList = new Vector<String>();
+        ArrayDeque<String> processList = new ArrayDeque<String>();
         
         
         
@@ -160,7 +160,7 @@ public class ProcessComponent {
             BufferedReader input =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
-                processList.addElement(line);
+                processList.add(line);
             }
 
             //closes the input stream, to make the input stream not leaking
@@ -172,7 +172,7 @@ public class ProcessComponent {
         }
         catch (Exception err) {
                 err.printStackTrace();
-                processList.addElement("Error: No Processes");
+                processList.add("Error: No Processes");
                 return (processList);
         }
     }
