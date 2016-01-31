@@ -4,9 +4,12 @@
  */
 package snrt;
 
+import java.awt.HeadlessException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
@@ -38,21 +41,19 @@ public class ProcessComponent {
                         (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
                 else
                      p = Runtime.getRuntime().exec("ps -A"); 
-                BufferedReader input =
-                        new BufferedReader(new InputStreamReader(p.getInputStream()));
+            try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
                 while ((line = input.readLine()) != null) {
                     processList.add(line);
                 }
                 
                 //closes the input stream, to make the input stream not leaking
                 //data or anything.
-                input.close();
+            }
                 
                 return (processList);
             }
         catch (Exception err) {
-                    err.printStackTrace();
-                    processList.add("Error: No Processes");
+                    processList.add("Error: No Processes" + err);
                     return (processList);
             }
         }
@@ -88,8 +89,10 @@ public class ProcessComponent {
             else
                 rt.exec("kill -9 " + processName);
         }
-        catch (Exception err) {
-            err.printStackTrace();
+        catch (IOException | HeadlessException err) {
+            JOptionPane.showMessageDialog(null, "could not kill task either an"
+                    + "IO exception or a HeadlessException occured", "Error:"
+                        , JOptionPane.OK_OPTION);
         }
     }
     
@@ -122,7 +125,6 @@ public class ProcessComponent {
             return (computerNameList);
         }
         catch (Exception err) {
-            err.printStackTrace();
             return (null);
         }   
     }
@@ -139,7 +141,7 @@ public class ProcessComponent {
         
         // I create this vector as my get processes requires some way to pass 
         // the information it has obtained to the rest of the program.
-        ArrayDeque<String> processList = new ArrayDeque<String>();
+        ArrayDeque<String> processList = new ArrayDeque();
         
         
         
@@ -152,27 +154,26 @@ public class ProcessComponent {
             if (System.getProperty("os.name").contains("Windows"))
                  p = Runtime.getRuntime().exec
                     (System.getenv("windir") +"\\system32\\"+"tasklist.exe \\S " 
-                            + computerName +" \\U "+ user +"\\P"+ pwd);
+                            + computerName +" \\U "+ user +"\\P"+
+                            Arrays.toString(pwd));
             else {
                 p = Runtime.getRuntime().exec("ps aux -a"); 
             }
             
-            BufferedReader input =
-                    new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null) {
-                processList.add(line);
+            try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                while ((line = input.readLine()) != null) {
+                    processList.add(line);
+                }
+                
+                //closes the input stream, to make the input stream not leaking
+                //data or anything.
             }
-
-            //closes the input stream, to make the input stream not leaking
-            //data or anything.
-            input.close();
 
             return (processList);
                 
         }
         catch (Exception err) {
-                err.printStackTrace();
-                processList.add("Error: No Processes");
+                processList.add("Error: No Processes" + err);
                 return (processList);
         }
     }

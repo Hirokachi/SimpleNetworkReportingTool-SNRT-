@@ -27,9 +27,9 @@ public class SettingComponent extends JPanel implements ActionListener{
     private GUIComponent GUI;
     private JTextField refreshDelay;
     private JFrame settings;
-    private String[] description = { "choose an option", "Highlight results",
+    private final String[] description = { "choose an option", "Highlight results",
         "Eliminate nonmatching results" };
-    private JComboBox filterOptions = new JComboBox();
+    private final JComboBox filterOptions = new JComboBox();
     
     /**
      * Things that need to be set up before any methods can be called

@@ -110,39 +110,36 @@ public class GUIComponent extends JPanel
         getProcess.setActionCommand("goGetIt");
         
         //Creates a local actionListener to refresh the task list.
-        ActionListener taskPerformer = new ActionListener() {
-            @Override
-             public void actionPerformed(ActionEvent evt) {
-                 if (searchFilter.getText().equalsIgnoreCase("")) {
-                     if ( !namesOfComputers.isSelected()){
-                        setJTable(processComponent.getProcesses());
-                     }
-                     else {
-                        setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
-                                [0], user.getText(), pwf.getPassword()));                     
-                     }
-                 }
-                 else {
-                     if (isMatchedHighlighted) {
-                        setJTable(processComponent.getProcesses());
-                        highlightFilter(searchFilter.getText());
-                     }
-                     else {
-                         setJTable(searchFilter(searchFilter.getText(),
+        ActionListener taskPerformer = (ActionEvent evt) -> {
+            if (searchFilter.getText().equalsIgnoreCase("")) {
+                if ( !namesOfComputers.isSelected()){
+                    setJTable(processComponent.getProcesses());
+                }
+                else {
+                    setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
+                            [0], user.getText(), pwf.getPassword()));
+                }
+            }
+            else {
+                if (isMatchedHighlighted) {
+                    setJTable(processComponent.getProcesses());
+                    highlightFilter(searchFilter.getText());
+                }
+                else {
+                    setJTable(searchFilter(searchFilter.getText(),
                             processComponent.getProcesses()));
-                     }
-                 }
+                }
             }
         };
+        
+        //Creates a new timer to be used in refreshing the task list after the
+        //number of milliseconds defined by the delay variable.
+        new Timer(delay, taskPerformer).start();
         
         //Settings button
         settings = new JButton("settings");
         settings.setActionCommand("goSetIt");
         settings.addActionListener(this);
-        
-        //Creates a new timer to be used in refreshing the task list after the
-        //number of milliseconds defined by the delay variable.
-        new Timer(delay, taskPerformer).start();
         
         //Creates the Button "Kill Selected Process" and sets it up.
         killTask = new JButton("Kill Selected Process");
