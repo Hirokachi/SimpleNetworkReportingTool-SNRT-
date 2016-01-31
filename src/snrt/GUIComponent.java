@@ -46,7 +46,7 @@ public class GUIComponent extends JPanel
     private final JButton getProcess, killTask, goSearch, settings;
     private final JTable processList;
     private final JScrollPane scrollerText;
-    private final ProcessComponent pID;
+    private final ProcessComponent processComponent;
     private final JTextArea numberOfProcess;
     private JRadioButtonMenuItem namesOfComputers;
     private JPasswordField pwf;
@@ -64,13 +64,13 @@ public class GUIComponent extends JPanel
         delay = 4500;
         
         //Creating the ProcessComponent object.
-        pID = new ProcessComponent();
+        processComponent = new ProcessComponent();
         
         //sets the possible connected computers
         setRadioButtons();
         
         //get the number of tasks
-        int numberOfProcesses = pID.getProcesses().size()-3;
+        int numberOfProcesses = processComponent.getProcesses().size()-3;
         
         //Set up the string that will go in to the text area
         String processes = "number of Processes: " + numberOfProcesses;
@@ -116,10 +116,10 @@ public class GUIComponent extends JPanel
              public void actionPerformed(ActionEvent evt) {
                  if (searchFilter.getText().equalsIgnoreCase("")) {
                      if ( !namesOfComputers.isSelected()){
-                        setJTable(pID.getProcesses());
+                        setJTable(processComponent.getProcesses());
                      }
                      else {
-                        setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+                        setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
                                 [0], user.getText(), pwf.getPassword()));                     
                      }
                  }
@@ -179,7 +179,7 @@ public class GUIComponent extends JPanel
             case "goGetIt":
                 //sets the Jlist with the "processList" from the "getProcesses"
                 //method.
-                setJTable(pID.getProcesses());
+                setJTable(processComponent.getProcesses());
                 break;
             case "goKillIt":
                 
@@ -199,7 +199,7 @@ public class GUIComponent extends JPanel
                     //computer.
                     if(!namesOfComputers.isSelected()) {
                         //pass the Process ID to the kill method
-                        pID.killSelectedProcess(processList.getValueAt(row, column)
+                        processComponent.killSelectedProcess(processList.getValueAt(row, column)
                                 .toString());
                     }
                     else {
@@ -220,16 +220,16 @@ public class GUIComponent extends JPanel
                 JOptionPane.showConfirmDialog(null, menu, "Please enter the username and"
                         + " password for the selected computer:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                         
-                setJTable(pID.getProcesses(namesOfComputers.getSelectedObjects()
+                setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
                         [0], user.getText(), pwf.getPassword()));
                 break;
             case "goSearchIt":
                 if (!isMatchedHighlighted) {
                     setJTable(searchFilter(searchFilter.getText(),
-                            pID.getProcesses()));
+                            processComponent.getProcesses()));
                 }
                 else {
-                    setJTable(pID.getProcesses());
+                    setJTable(processComponent.getProcesses());
                     highlightFilter(searchFilter.getText());
                 }
                 break;
@@ -322,7 +322,7 @@ public class GUIComponent extends JPanel
                 || isMatchedHighlighted) {
             //add the number of rows to the jtable so it looks nice.
             DefaultTableModel dtm = (DefaultTableModel) processList.getModel();
-            dtm.setRowCount(pID.getProcesses().size()-3);
+            dtm.setRowCount(processComponent.getProcesses().size()-3);
         }
         else {
             //add the number of rows to the jtable so it looks nice.
@@ -331,7 +331,7 @@ public class GUIComponent extends JPanel
         }
         
         //Set up the string that will go in to the text area
-        String processes = "number of Processes: " + pID.getProcesses().size();
+        String processes = "number of Processes: " + processComponent.getProcesses().size();
         
         //Set the number of processes in the text area.
         numberOfProcess.setText(processes);
@@ -380,9 +380,9 @@ public class GUIComponent extends JPanel
         
         //as long as there are computers that are seen by this computer then
         //show the names of those computers
-        if (!pID.getComputerNames().isEmpty()) {
+        if (!processComponent.getComputerNames().isEmpty()) {
             //Does the heavy Lifting for the names of computers;
-            for (String lines: pID.getComputerNames()) {
+            for (String lines: processComponent.getComputerNames()) {
                 JRadioButton computerName = new JRadioButton(lines);
                 computerName.setActionCommand("goGetThat");
                 computerName.addActionListener(this);
@@ -417,7 +417,7 @@ public class GUIComponent extends JPanel
         //adds the scrollerText, getProcess button, and the killTask button to
         //the group if there isn't any connected computers to this computer. 
         //otherwise add the namesOfComputers radio menu
-        if (pID.getComputerNames().isEmpty()) {
+        if (processComponent.getComputerNames().isEmpty()) {
             Group.addGroup(layout.createSequentialGroup()
                 .addComponent(settings).addComponent(searchFilter)
                 .addComponent(goSearch).addComponent(scrollerText)
