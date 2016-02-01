@@ -137,6 +137,9 @@ public class GUIComponent extends JPanel
         //number of milliseconds defined by the delay variable.
         new Timer(delay, taskPerformer).start();
         
+        //things?
+        searchFilter.addActionListener(taskPerformer);
+        
         //Settings button
         settings = new JButton("settings");
         settings.setActionCommand("goSetIt");
