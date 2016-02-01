@@ -42,7 +42,6 @@ public class SettingComponent extends JPanel implements ActionListener{
         }
     }
 
-
     /**
      * Create the setting GUI
      * @param processer
@@ -63,6 +62,7 @@ public class SettingComponent extends JPanel implements ActionListener{
         
         //TextField Setup
         refreshDelay = new JTextField(12);
+        refreshDelay.setText(GUI.getDelay());
 
         //Sets the label to the Text 
         delayLabel.setLabelFor(refreshDelay);
@@ -120,18 +120,18 @@ public class SettingComponent extends JPanel implements ActionListener{
         if (null != e.getActionCommand())
             switch (e.getActionCommand()) {
             case "setSettings":
-                if (refreshDelay.getText().isEmpty() && 
+                if (refreshDelay.getText().contentEquals(GUI.getDelay())  && 
                         filterOptions.getSelectedItem().equals("choose an option")) {
                     JOptionPane.showMessageDialog(null, "No Settings where "
                             + "changed. Not setting anything.", "Warning:"
                     , JOptionPane.OK_OPTION); 
                 }
-                else if(refreshDelay.getText().isEmpty() && 
+                else if(refreshDelay.getText().contentEquals(GUI.getDelay()) && 
                         !filterOptions.getSelectedItem().equals("choose an option")) {
                     GUI.setFilter(filterOptions.getSelectedItem().toString());
                     settings.dispose();
                 }
-                else if (!refreshDelay.getText().isEmpty() && 
+                else if (!refreshDelay.getText().contentEquals(GUI.getDelay()) && 
                        filterOptions.getSelectedItem().equals("choose an option")) {
                     String delay = refreshDelay.getText();
                     GUI.setDelay(Integer.parseInt(delay));

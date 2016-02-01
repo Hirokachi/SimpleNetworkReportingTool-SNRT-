@@ -286,6 +286,14 @@ public class GUIComponent extends JPanel
     }
     
     /**
+     * Gets the delay until the next time it refreshes
+     * @return delay: returns the String version if the delay number 
+     */
+    public String getDelay() {
+        return (Integer.toString(delay));
+    }
+    
+    /**
      * Sets the way that the filter shows results
      * @param filter: description of how filter shows results
      */
@@ -420,8 +428,6 @@ public class GUIComponent extends JPanel
                 .addComponent(getProcess).addComponent(killTask)
                 .addComponent(numberOfProcess));
         }
-        
-       
         
         //adds the group as a vertical group in the layout for the frame and
         //doesn't need to be put first because it is setting the content after
