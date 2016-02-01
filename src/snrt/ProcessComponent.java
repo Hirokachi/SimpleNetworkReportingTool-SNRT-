@@ -143,8 +143,6 @@ public class ProcessComponent {
         // the information it has obtained to the rest of the program.
         ArrayDeque<String> processList = new ArrayDeque();
         
-        
-        
         try {
             String line;
 
