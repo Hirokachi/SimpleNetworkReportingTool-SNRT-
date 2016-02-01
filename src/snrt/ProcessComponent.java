@@ -45,9 +45,6 @@ public class ProcessComponent {
                 while ((line = input.readLine()) != null) {
                     processList.add(line);
                 }
-                
-                //closes the input stream, to make the input stream not leaking
-                //data or anything.
             }
                 
                 return (processList);
@@ -102,7 +99,6 @@ public class ProcessComponent {
         
         //The vector that will contain the list of names
         ArrayDeque<String> computerNameList = new ArrayDeque();
-       
         
         try{
             Process p;
@@ -120,8 +116,7 @@ public class ProcessComponent {
                 if (line.contains("<00>"))
                     computerNameList.add(line);
             }
-            
-            
+
             return (computerNameList);
         }
         catch (Exception err) {
@@ -162,9 +157,6 @@ public class ProcessComponent {
                 while ((line = input.readLine()) != null) {
                     processList.add(line);
                 }
-                
-                //closes the input stream, to make the input stream not leaking
-                //data or anything.
             }
 
             return (processList);

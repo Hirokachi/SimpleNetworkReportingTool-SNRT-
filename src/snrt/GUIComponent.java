@@ -38,9 +38,10 @@ public class GUIComponent extends JPanel
      * JTable processList
      * JScrollPane scrollerText
      * ProcessComponent pID
-     * JPasswordField pwf
+     * JPasswordField password
      * JTextField user
-     * int resultFilterNumber, delay
+     * integer resultFilterNumber, delay
+     * boolean isMatchedHighlighted
      */
     private final JButton getProcess, killTask, settings;
     private final JTable processList;
@@ -48,7 +49,7 @@ public class GUIComponent extends JPanel
     private final ProcessComponent processComponent;
     private final JTextArea numberOfProcess;
     private JRadioButtonMenuItem namesOfComputers;
-    private JPasswordField pwf;
+    private JPasswordField password;
     private JTextField user, searchFilter;
     private int resultFilterNumber, delay;
     private boolean isMatchedHighlighted;
@@ -117,7 +118,7 @@ public class GUIComponent extends JPanel
                 }
                 else {
                     setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
-                            [0], user.getText(), pwf.getPassword()));
+                            [0], user.getText(), password.getPassword()));
                 }
             }
             else {
@@ -208,16 +209,16 @@ public class GUIComponent extends JPanel
                         , JOptionPane.OK_OPTION);
                 break;
             case "goGetThat":
-                 pwf = new JPasswordField(12);
+                 password = new JPasswordField(12);
                 user = new JTextField(12);
                 JTextPane menu = new JTextPane();
-                menu.add(pwf);
+                menu.add(password);
                 menu.add(user);
                 JOptionPane.showConfirmDialog(null, menu, "Please enter the username and"
                         + " password for the selected computer:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                         
                 setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
-                        [0], user.getText(), pwf.getPassword()));
+                        [0], user.getText(), password.getPassword()));
                 break;
             case "goSetIt":
                 SettingComponent setIt = new SettingComponent();
