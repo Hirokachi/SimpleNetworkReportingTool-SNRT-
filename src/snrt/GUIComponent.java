@@ -123,8 +123,8 @@ public class GUIComponent extends JPanel
             }
             else {
                 if (isMatchedHighlighted) {
-                    setJTable(processComponent.getProcesses());
-                    highlightFilter(searchFilter.getText());
+                    highlightFilter(searchFilter.getText()
+                            ,processComponent.getProcesses());
                 }
                 else {
                     setJTable(searchFilter(searchFilter.getText(),
@@ -136,9 +136,6 @@ public class GUIComponent extends JPanel
         //Creates a new timer to be used in refreshing the task list after the
         //number of milliseconds defined by the delay variable.
         new Timer(delay, taskPerformer).start();
-        
-        //things?
-        searchFilter.addActionListener(taskPerformer);
         
         //Settings button
         settings = new JButton("settings");
@@ -268,16 +265,46 @@ public class GUIComponent extends JPanel
     /*
     * Highlights the rows that contains the searchValue.
     */
-    private void highlightFilter (String searchValue) {
+    private void highlightFilter (String searchValue, ArrayDeque<String> taskList ) {
         
+        //Verifies that we aren't looking for a empty string
         if (!searchValue.isEmpty()) {
-            for (int i = 0; i < processList.getRowCount(); i++) {
-                if(processList.getValueAt(i, 0).toString()
-                        .contains(searchValue)) {
-                    processList.setRowSelectionInterval(i, i);
-                    
+            
+            //Creates a counter to count the number of the tasks that matched 
+            //the searchValue
+            int matchedTasks;
+
+            // Creates the array to store the matching tasks
+            ArrayDeque<String> matchedTaskList = new ArrayDeque();
+            
+            //Duplicate the taskList
+            ArrayDeque<String> DuplicateTaskList = new ArrayDeque();
+            DuplicateTaskList.addAll(taskList);
+
+            //start looking throught the processes.
+            taskList.stream().forEach((task) -> {
+                //grab the image name to see if the search value is contained in
+                // the image name. Add the matched value to the Array. Remove 
+                //that matched task from task list.
+                String name = task.split(" ")[0];
+                if (name.toLowerCase().contains(searchValue.toLowerCase())) {
+                    matchedTaskList.add(task);
+                    DuplicateTaskList.remove(task);
                 }
-            }
+            });
+            
+            //Find the size of the ArrayDeque at this point to highLight the
+            //found matches 
+            matchedTasks = matchedTaskList.size();
+            
+            //Adds the rest of the tasks to the sorted tasks
+            matchedTaskList.addAll(DuplicateTaskList);
+           
+            //Sets the table with the sorted Tasks
+            setJTable(matchedTaskList);
+            
+            //Selects the tasks from the top of the to the row that the task
+            processList.addRowSelectionInterval(0, matchedTasks);
         }
     }
     
