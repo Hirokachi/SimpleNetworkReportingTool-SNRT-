@@ -11,8 +11,7 @@ import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JTable;
-import javax.swing.GroupLayout;
-import javax.swing.JComponent;
+import java.awt.*;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.util.ArrayDeque;
@@ -419,8 +418,7 @@ public class GUIComponent extends JPanel
         }
     }
  
-    /**
-     * Create the GUI and show it.
+    /**     * Create the GUI and show it.
      */
     public void createAndShowGUI() {
 
@@ -432,42 +430,39 @@ public class GUIComponent extends JPanel
         //exit the program cleanly once the window is closed by hitting the x.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        // Create and set up the content pane.
-        JComponent panel = new JPanel();
-        GroupLayout layout = new GroupLayout(panel);
-        
-        //sets the layout to the group layout that is previously defined.
-        frame.setLayout(layout);
-        
-        //Create a sequential group to be added to the layout for the frame.
-        GroupLayout.SequentialGroup Group = layout.createSequentialGroup();
-        
-        //adds the scrollerText, getProcess button, and the killTask button to
-        //the group if there isn't any connected computers to this computer. 
-        //otherwise add the namesOfComputers radio menu
-        if (processComponent.getComputerNames().isEmpty()) {
-            Group.addGroup(layout.createSequentialGroup()
-                .addComponent(settings).addComponent(searchFilter)
-                .addComponent(scrollerText)
-                .addComponent(getProcess).addComponent(killTask)
-                .addComponent(numberOfProcess));
-        }
-        else {
-             Group.addGroup(layout.createSequentialGroup()
-                .addComponent(settings).addComponent(searchFilter)
-                .addComponent(scrollerText)
-                .addComponent(getProcess).addComponent(killTask)
-                .addComponent(numberOfProcess));
-        }
-        
-        //adds the group as a vertical group in the layout for the frame and
-        //doesn't need to be put first because it is setting the content after
-        //the layout is created and intialized.
-        layout.setVerticalGroup(Group);
-        
-        // Create the panel.
-        frame.setContentPane(panel);
-        
+        //sets the layout to a GridBagLayout 
+        frame.setLayout(new GridBagLayout());
+	GridBagConstraints c = new GridBagConstraints();
+       
+        //Sets the constraints for this component
+        c.gridy = 10;
+        c.weightx = 0.5;
+        // the anchor tells the following component where to be on the frame
+        // from row it is set with the gridy
+        c.anchor = GridBagConstraints.CENTER;
+
+        //add this component to the frame with the above constrants
+        frame.add(scrollerText, c);
+
+        c.gridx = 0;
+        c.gridy = 0;   //resets the row where the component will go.
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
+        frame.add(settings, c);
+
+        c.anchor = GridBagConstraints.PAGE_START;
+        frame.add(searchFilter, c);
+
+        c.gridy = 15; // sets the following components to be at the end of 
+        // the frame
+        c.anchor = GridBagConstraints.LAST_LINE_START;
+        frame.add(getProcess, c);
+
+        c.anchor = GridBagConstraints.PAGE_END;
+        frame.add(killTask, c);
+
+        c.anchor = GridBagConstraints.LAST_LINE_END;
+        frame.add(numberOfProcess, c);
+
         //Display the window.
         frame.pack();
         frame.setBounds(0, 0, 550, 600);

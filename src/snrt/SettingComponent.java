@@ -123,8 +123,10 @@ public class SettingComponent extends JPanel implements ActionListener{
                 if (refreshDelay.getText().contentEquals(GUI.getDelay())  && 
                         filterOptions.getSelectedItem().equals("choose an option")) {
                     JOptionPane.showMessageDialog(null, "No Settings where "
-                            + "changed. Not setting anything.", "Warning:"
-                    , JOptionPane.OK_OPTION); 
+                            + "changed. Not setting anything. Closing window."
+                            , "Warning:"
+                    , JOptionPane.OK_OPTION);
+                    settings.dispose();
                 }
                 else if(refreshDelay.getText().contentEquals(GUI.getDelay()) && 
                         !filterOptions.getSelectedItem().equals("choose an option")) {
