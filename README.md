@@ -6,11 +6,13 @@ Query on the server will run a script to login (after prompting you to type the 
 
 To run and compile the program:
 For windows (below):
- - goto the command prompt navigate to the JRE v7 install files
+ - hit the key combination windows key+r to bring up the command prompt
+ - to check the java version; type java -version (required version: 7)
  - type javac [yourdownloadpath]\SNRT
  - type java [yourcompilepath]\SRNT.java
 
 For OSX and Linux:
+ - open terminal
  - type javac [yourdownloadpath]\SNRT
  - type java [yourcompilepath]\SRNT.java
 
