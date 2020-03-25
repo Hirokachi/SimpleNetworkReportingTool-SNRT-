@@ -2,7 +2,7 @@
  * This class is the class that gets the processes 
  * from the computer it is running on.
  */
-package snrt;
+package com.mycompany.snrt;
 
 import java.awt.HeadlessException;
 import java.io.BufferedReader;

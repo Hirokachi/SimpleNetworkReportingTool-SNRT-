@@ -1,7 +1,7 @@
 /*
  * This is the Settings class.
  */
-package snrt;
+package com.mycompany.snrt;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;

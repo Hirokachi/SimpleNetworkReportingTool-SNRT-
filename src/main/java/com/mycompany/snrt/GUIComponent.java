@@ -2,7 +2,7 @@
  * This class contains the information for the GUI to run
  * on this program.
  */
-package snrt;
+package com.mycompany.snrt;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
