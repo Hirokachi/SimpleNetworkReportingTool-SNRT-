@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Arrays;
+//import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,8 +21,8 @@ public class ProcessComponent {
     /**
      * This method sets processList and returns that information to the 
      * method/class that called it.
-     * @return: Will either return the process information, or "error: no 
-     * processes" if it couldn't find any processes running.
+     * @return ArrayDeque: this method will either return the process information
+     * or "error: no processes" if it couldn't find any processes running.
      */
     public ArrayDeque<String> getProcesses() {
         
@@ -49,7 +49,7 @@ public class ProcessComponent {
                 
                 return (processList);
             }
-        catch (Exception err) {
+        catch (IOException err) {
                     processList.add("Error: No Processes" + err);
                     return (processList);
             }
@@ -60,6 +60,8 @@ public class ProcessComponent {
      * 
      * @param processName: the process string that has been selected through 
      * the GUIComponent and needs to be killed/ended.
+     * @return: this method doesn't return any values because on refresh 
+     * the tasks that were killed will not exist anymore
      */
     public void killSelectedProcess (String processName) {
         
@@ -93,6 +95,7 @@ public class ProcessComponent {
         }
     }
     
+    /*
     public ArrayDeque<String> getComputerNames (){
         
         String line;
@@ -130,7 +133,7 @@ public class ProcessComponent {
      * @param user
      * @param pwd
      * @return 
-     */
+     
     public ArrayDeque<String> getProcesses(Object computerName, String user
             , char[] pwd) {     
         
@@ -167,4 +170,5 @@ public class ProcessComponent {
                 return (processList);
         }
     }
+*/
 }

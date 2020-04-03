@@ -66,7 +66,7 @@ public class GUIComponent extends JPanel
         processComponent = new ProcessComponent();
         
         //sets the possible connected computers
-        setRadioButtons();
+        //setRadioButtons();
         
         //get the number of tasks
         int numberOfProcesses = processComponent.getProcesses().size()-3;
@@ -112,15 +112,16 @@ public class GUIComponent extends JPanel
         //Creates a local actionListener to refresh the task list.
         ActionListener taskPerformer = (ActionEvent evt) -> {
             if (searchFilter.getText().equalsIgnoreCase("")) {
-                if ( !namesOfComputers.isSelected()){
+                /*if ( !namesOfComputers.isSelected()){
                     setJTable(processComponent.getProcesses());
                 }
                 else {
                     setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
                             [0], user.getText(), password.getPassword()));
                 }
+                
             }
-            else {
+            else {*/
                 if (isMatchedHighlighted) {
                     highlightFilter(searchFilter.getText()
                             ,processComponent.getProcesses());
@@ -216,8 +217,8 @@ public class GUIComponent extends JPanel
                 JOptionPane.showConfirmDialog(null, menu, "Please enter the username and"
                         + " password for the selected computer:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                         
-                setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
-                        [0], user.getText(), password.getPassword()));
+                //setJTable(processComponent.getProcesses(namesOfComputers.getSelectedObjects()
+                //        [0], user.getText(), password.getPassword()));
                 break;
             case "goSetIt":
                 SettingComponent setIt = new SettingComponent();
@@ -396,7 +397,7 @@ public class GUIComponent extends JPanel
     
     /*
      * set the names of the connected devices as radio button
-     */
+     
     private void setRadioButtons() {
         
         //create the holder to hold the resulting computer names
@@ -417,6 +418,7 @@ public class GUIComponent extends JPanel
             });
         }
     }
+    */
  
     /**     * Create the GUI and show it.
      */
